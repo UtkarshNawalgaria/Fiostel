@@ -3,6 +3,9 @@ module.exports = {
         API_URL: process.env.API_URL,
     },
     images: {
-        domains: ['localhost',],
+        domains: [
+            'http://5edbf18d4220.ngrok.io', 
+            'localhost'
+        ],
     }
 }
