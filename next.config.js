@@ -1,5 +1,8 @@
 module.exports = {
+    env: {
+        API_URL: process.env.API_URL,
+    },
     images: {
-        domains: ['creator.zoho.in']
+        domains: ['localhost',],
     }
 }
