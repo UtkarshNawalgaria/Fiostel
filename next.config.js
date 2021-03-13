@@ -4,7 +4,7 @@ module.exports = {
     },
     images: {
         domains: [
-            'http://5edbf18d4220.ngrok.io', 
+            'cdn.sanity.io',
             'localhost'
         ],
     }

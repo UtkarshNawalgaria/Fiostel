@@ -1,43 +1,38 @@
-const API_URL = process.env.API_URL
-
+import client from '../../client'
 const SingleRoom = ({ room }) => {
+  return (
+    <div>
+      <h1>Room {room.title}</h1>
+    </div>
+  );
+};
 
-    return (
-        <div>
-            <h1>Room {room.Name}</h1>
-        </div>
-    )
-}
+export default SingleRoom;
 
-export default SingleRoom
 
 export async function getStaticPaths() {
+  const rooms = await client.fetch(`*[_type == "room"] { slug }`)
 
-    const response = await fetch(`${API_URL}/rooms`, {
-        "method": "GET",
-    })
-    const rooms = await response.json()
+  const paths = rooms.map((room) => ({
+    params: { slug: room.slug.current },
+  }));
 
-    const paths = rooms.map( room => ({
-        params: { slug: room.slug}
-    }))
-
-    return {
-        paths,
-        fallback: false
-    }
+  return {
+    paths,
+    fallback: false
+  };
 }
 
 export async function getStaticProps({ params }) {
-    const { slug } = params
-    const response = await fetch(`${API_URL}/rooms/${slug}`, {
-        "method": "GET",
-    })
-    const room = await response.json()
+  const { slug } = params;
 
-    return {
-        props: {
-            room
-        }
-    }
+  const room = await client.fetch(`*[_type == "room" && slug.current == '${slug}']`)
+                            .then( data => data[0])
+
+  console.log(room)
+  return {
+    props: {
+      room,
+    },
+  };
 }
