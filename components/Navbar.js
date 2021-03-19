@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import { NavData } from './navData'
+import NavItems from './data/navItems'
 import Sidebar from './Sidebar'
 
 
@@ -33,7 +33,7 @@ const Navbar = () => {
 
                 {/* Navigation Menu */}
                 <nav className="hidden md:flex md:justify-between">
-                    {NavData.map((item, index) => {
+                    {NavItems.map((item, index) => {
                         return (
                             <Link href={item.path}>
 
@@ -49,7 +49,7 @@ const Navbar = () => {
 
             <Sidebar sidebar={sidebar} showSidebar={showSidebar}>
                 <div>
-                    {NavData.map((item, index) => {
+                    {NavItems.map((item, index) => {
                         return (
                             <div key={index} onClick={showSidebar} className="p-2 m-1 text-center bg-gray-200 rounded-lg hover:bg-gray-400">
                                 <Link href={item.path}>

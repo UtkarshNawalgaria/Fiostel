@@ -1,7 +1,11 @@
-export const NavData = [
+export default [
     {
         title: "Rooms",
         path: "/rooms"
+    },
+    {
+        title: "Cafe",
+        path: "/cafe"
     },
     {
         title: "About Us",

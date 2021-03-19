@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-const API_URL = process.env.API_URL
 
 const RoomLineItem = ({ room }) => {
     
@@ -13,6 +12,7 @@ const RoomLineItem = ({ room }) => {
                     layout="fill"
                     objectFit="cover"
                     className="rounded-lg"
+                    alt={room.imageAlt}
                 />
             </div>
             <div className="mt-3 md:flex md:flex-col md:justify-between md:pl-4 md:pr-2 md:mt-0">

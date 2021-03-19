@@ -1,10 +1,35 @@
+import Head from 'next/head'
 
-const About = () => {
+import client from '../client'
+
+const pageQuery = `
+  *[_type == "page" && title == "About Us"][0]
+`
+
+const About = ({ pageData }) => {
+
+    const { pageSEO: { title = '', description = ''}, keywords = [] } = pageData
+
     return (
-        <div>
-            <h1>About Page</h1>
-        </div>
-    )
+      <div>
+        <Head>
+          <title>{title}</title>
+          <meta name="description" content={description} />
+          <meta name="keywords" content={keywords.join(', ')} />
+        </Head>
+        <h1>{pageData.title}</h1>
+      </div>
+    );
 }
 
 export default About
+
+export async function getStaticProps() {
+    const pageData = await client.fetch(pageQuery);
+
+    return {
+        props: {
+            pageData
+        }
+    }
+}
