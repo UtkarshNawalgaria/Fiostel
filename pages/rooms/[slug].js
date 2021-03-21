@@ -29,7 +29,6 @@ export async function getStaticProps({ params }) {
   const room = await client.fetch(`*[_type == "room" && slug.current == '${slug}']`)
                             .then( data => data[0])
 
-  console.log(room)
   return {
     props: {
       room,

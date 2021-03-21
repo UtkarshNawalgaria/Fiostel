@@ -4,8 +4,6 @@ import { useState } from 'react'
 import NavItems from './data/navItems'
 import Sidebar from './Sidebar'
 
-
-
 const Navbar = () => {
     const [sidebar, setSidebar] = useState(false)
 
@@ -19,7 +17,7 @@ const Navbar = () => {
                 <div>
                     <Link href="/">
                         <a>
-                            <Image src="/media/Fiostel-Logo.png" width={128} height={68} />
+                            <Image src="/media/Fiostel-Logo.png" width={128} height={68} alt="Site Logo"/>
                         </a>
                     </Link>
                 </div>
@@ -35,10 +33,9 @@ const Navbar = () => {
                 <nav className="hidden md:flex md:justify-between">
                     {NavItems.map((item, index) => {
                         return (
-                            <Link href={item.path}>
+                            <Link href={item.path} key={index}>
 
-
-                                <a key={index} className="p-3 mx-3 bg-gray-200 rounded">{item.title}</a>
+                                <a key={index} className="p-3 mx-3 border-b-2 border-transparent hover:border-yellow-300">{item.title}</a>
 
                             </Link>
                         )

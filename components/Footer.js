@@ -29,7 +29,7 @@ const Footer = () => {
             <div className="my-4">
               {social.map((media) => {
                 return (
-                  <Link href={media.url}>
+                  <Link href={media.url} key={media.id}>
                     <a className="mx-2">{media.icon}</a>
                   </Link>
                 );

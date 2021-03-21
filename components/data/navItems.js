@@ -1,18 +1,22 @@
 export default [
     {
+        id: 1,
         title: "Rooms",
         path: "/rooms"
     },
     {
+        id: 2,
         title: "Cafe",
         path: "/cafe"
     },
-    {
-        title: "About Us",
-        path: "/about"
-    },
-    {
-        title: "Contact Us",
-        path: "/contact"
-    },
+    // {
+    //     id: 3,
+    //     title: "About Us",
+    //     path: "/about"
+    // },
+    // {
+    //     id: 4,
+    //     title: "Contact Us",
+    //     path: "/contact"
+    // },
 ]
