@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, createContext } from 'react';
 
-const useCart = () => {
+export const CartContext = createContext()
+
+export const CartProvider = ({children}) => {
+
   const [cart, setCart] = useState([]);
   const [cartTotal, setCartTotal] = useState(0);
 
@@ -38,22 +41,21 @@ const useCart = () => {
   };
 
   const changeQuantity = (itemId, type) => {
-
     switch (type) {
       case 'INCREASE':
         setCart((oldCart) => {
           return oldCart.map((item) =>
-            item._id === itemId ? { ...item, count: item.count+1 } : item
+            item._id === itemId ? { ...item, count: item.count + 1 } : item
           );
         });
 
         break;
       case 'DECREASE':
-          setCart((oldCart) => {
-            return oldCart.map((item) =>
-              item._id === itemId ? { ...item, count: item.count-1 } : item
-            );
-          });
+        setCart((oldCart) => {
+          return oldCart.map((item) =>
+            item._id === itemId ? { ...item, count: item.count - 1 } : item
+          );
+        });
         break;
     }
   };
@@ -63,13 +65,18 @@ const useCart = () => {
     setCartTotal(total);
   };
 
-  return {
-    cart,
-    addToCart,
-    removeItem,
-    cartTotal,
-    changeQuantity,
-  };
-};
+  return (
+    <CartContext.Provider
+      value={{
+        cart,
+        addToCart,
+        removeItem,
+        cartTotal,
+        changeQuantity,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
+}
 
-export default useCart;
