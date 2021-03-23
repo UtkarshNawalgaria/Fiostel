@@ -17,7 +17,7 @@ const publicClient = sanityClient({
 const builder = imageUrlBuilder(publicClient);
 const urlFor = (source) => builder.image(source);
 
-const Cafe = ({ pageData, categories }) => {
+const Cafe = ({ pageData, categories, items }) => {
 
   const {
     pageSEO: { title = '', description = '' },
@@ -25,24 +25,17 @@ const Cafe = ({ pageData, categories }) => {
   } = pageData
   const { cart, addToCart } = useCart()
 
-  const [menuItems, setMenuItems] = useState([]);
-  const [currCategory, setCurrCategory] = useState('');
-  const [loading, setLoading] = useState(true);
-
-  useEffect(async () => {
-    const items = await publicClient.fetch(
-      `*[_type == 'item' && category._ref == "${categories[0]._id}"]`
-    );
-    setCurrCategory(categories[0].title);
-    setMenuItems(items);
-    setLoading(false)
-  }, []);
+  const [menuItems, setMenuItems] = useState(items);
+  const [currCategory, setCurrCategory] = useState(categories[0].title);
+  const [loading, setLoading] = useState(false);
 
   async function getMenuItems(e, id) {
-    const items = await publicClient.fetch(
+    setLoading(true)
+    const nitems = await publicClient.fetch(
       `*[_type == 'item' && category._ref == "${id}"]`
     );
-    setMenuItems(items);
+    setLoading(false)
+    setMenuItems(nitems);
   }
 
   return (
@@ -158,9 +151,14 @@ export async function getStaticProps() {
     '*[_type == "category"] | order(order)'
   );
 
+  const items = await client.fetch(
+    `*[_type == 'item' && category._ref == "${categories[0]._id}"]`
+  );
+
   return {
     props: {
       categories,
+      items,
       pageData,
     },
   };

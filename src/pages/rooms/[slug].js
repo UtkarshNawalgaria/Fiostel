@@ -1,5 +1,10 @@
+// Next.js Imports
 import Image from 'next/image';
+import Head from 'next/head'
+
 import client from '../../client';
+
+// Components
 import ReservationForm from '../../components/Form';
 import Heading from '../../components/Heading';
 import Divider from '../../components/Divider'
@@ -7,6 +12,10 @@ import Divider from '../../components/Divider'
 const SingleRoom = ({ room }) => {
   return (
     <div className="container mx-auto md:max-w-5xl mt-5 px-4">
+      <Head>
+        <title>{room.title}</title>
+        <meta name="description" content={room.description}/>
+      </Head>
       <section>
         <Image
           src={room.imageUrl}
