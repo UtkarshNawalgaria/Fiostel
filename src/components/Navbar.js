@@ -23,7 +23,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Menu Toggle Hamburger Icon */}
-                <div className={"h-8 w-10 md:hidden " + (sidebar ? 'hidden' : '')} onClick={showSidebar}>
+                <div className={"h-8 w-10 md:hidden cursor-pointer " + (sidebar ? 'hidden' : '')} onClick={showSidebar}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
                     </svg>
@@ -48,12 +48,16 @@ const Navbar = () => {
                 <div>
                     {NavItems.map((item, index) => {
                         return (
-                            <div key={index} onClick={showSidebar} className="p-2 m-1 text-center bg-gray-200 rounded-lg hover:bg-gray-400">
-                                <Link href={item.path}>
-                                    <a>{item.title}</a>
-                                </Link>
-                            </div>
-                        )
+                          <div
+                            key={index}
+                            onClick={showSidebar}
+                            className="p-2 m-1 text-center border-b-4 border-transparent hover:border-yellow-300"
+                          >
+                            <Link href={item.path}>
+                              <a>{item.title}</a>
+                            </Link>
+                          </div>
+                        );
                     })}
                 </div>
             </Sidebar>

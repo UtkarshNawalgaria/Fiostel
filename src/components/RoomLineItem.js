@@ -34,7 +34,7 @@ const RoomLineItem = ({ room }) => {
             <div className="md:flex md:flex-col md:justify-between md:flex-none">
                 <p className="text-lg font-semibold text-gray-700 pt-1 hidden md:block">Rs {room.price} / month</p>
                 <Link href={`/rooms/${room.slug.current}`}>
-                    <button className="p-3 mt-4 bg-yellow-400 rounded-lg text-white font-semibold md:mx-2">More Info</button>
+                    <button className="p-3 mt-4 bg-yellow-300 rounded-md text-white font-semibold md:mx-2">More Info</button>
                 </Link>
 
             </div>

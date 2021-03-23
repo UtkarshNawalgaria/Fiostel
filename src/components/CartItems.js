@@ -1,10 +1,9 @@
-import {useContext} from 'react'
-import {CartContext} from '../utils/cart'
+import useCart from '../utils/cart'
 import Link from 'next/link';
 
 const CartItems = () => {
 
-    const {cart, changeQuantity, removeItem, cartTotal} = useContext(CartContext)
+    const {cart, changeQuantity, removeItem, cartTotal} = useCart()
 
     return (
       <>

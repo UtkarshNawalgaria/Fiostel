@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import CartItems from '../components/CartItems'
-import {CartContext} from '../utils/cart';
+import useCart from '../utils/cart';
 
 import sanityClient from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
@@ -18,13 +18,16 @@ const builder = imageUrlBuilder(publicClient);
 const urlFor = (source) => builder.image(source);
 
 const Cafe = ({ pageData, categories }) => {
+
   const {
     pageSEO: { title = '', description = '' },
     keywords = [],
-  } = pageData;
+  } = pageData
+  const { cart, addToCart } = useCart()
+
   const [menuItems, setMenuItems] = useState([]);
   const [currCategory, setCurrCategory] = useState('');
-  const { cart, addToCart } = useContext(CartContext)
+  const [loading, setLoading] = useState(true);
 
   useEffect(async () => {
     const items = await publicClient.fetch(
@@ -32,6 +35,7 @@ const Cafe = ({ pageData, categories }) => {
     );
     setCurrCategory(categories[0].title);
     setMenuItems(items);
+    setLoading(false)
   }, []);
 
   async function getMenuItems(e, id) {
@@ -78,44 +82,50 @@ const Cafe = ({ pageData, categories }) => {
         {/* Menu Items */}
         <section className="w-3/5 p-6">
           <h2 className="text-4xl mb-10">{currCategory}</h2>
-          {menuItems.map((item, idx) => {
-            return (
-              <div key={idx}>
-                <div className="flex pb-4 mb-4 border-b-2">
-                  {/* Food Image */}
-                  <div className="w-auto">
-                    <Image
-                      src={urlFor(item.image).url()}
-                      height={150}
-                      width={150}
-                      objectFit="cover"
-                      className="rounded-lg"
-                      alt={item.image.alt}
-                    />
-                  </div>
+          {loading ? (
+            <h1>Items Loading</h1>
+          ) : (
+            <>
+              {menuItems.map((item, idx) => {
+                return (
+                  <div key={idx}>
+                    <div className="flex pb-4 mb-4 border-b-2">
+                      {/* Food Image */}
+                      <div className="w-auto">
+                        <Image
+                          src={urlFor(item.image).url()}
+                          height={150}
+                          width={150}
+                          objectFit="cover"
+                          className="rounded-lg"
+                          alt={item.image.alt}
+                        />
+                      </div>
 
-                  {/* Food Details */}
-                  <div className="flex flex-col px-4 w-2/3">
-                    <h3 className="text-lg font-semibold -mt-1">
-                      {item.item_name}
-                    </h3>
-                    <p>Rs. {item.price}</p>
-                    <p className="mt-2 text-gray-500">Description</p>
-                  </div>
+                      {/* Food Details */}
+                      <div className="flex flex-col px-4 w-2/3">
+                        <h3 className="text-lg font-semibold -mt-1">
+                          {item.item_name}
+                        </h3>
+                        <p>Rs. {item.price}</p>
+                        <p className="mt-2 text-gray-500">Description</p>
+                      </div>
 
-                  {/* Add to Cart button */}
-                  <div className="w-1/3 text-center">
-                    <button
-                      className="px-4 py-2 bg-green text-white hover:shadow-lg"
-                      onClick={(e) => addToCart(item)}
-                    >
-                      Add to Cart
-                    </button>
+                      {/* Add to Cart button */}
+                      <div className="w-1/3 text-center">
+                        <button
+                          className="px-4 py-2 bg-green text-white hover:shadow-lg"
+                          onClick={(e) => addToCart(item)}
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            );
-          })}
+                );
+              })}
+            </>
+          )}
         </section>
 
         {/* Cart Section */}
