@@ -1,13 +1,11 @@
 import useCart from '../utils/cart'
-import Link from 'next/link';
 
 const CartItems = () => {
 
-    const {cart, changeQuantity, removeItem, cartTotal} = useCart()
+    const {cart, changeQuantity, removeItem} = useCart()
 
     return (
       <>
-        <h3 className="text-4xl mb-10">Cart</h3>
         <div>
           {cart.map((cartItem, idx) => {
             return (
@@ -41,16 +39,6 @@ const CartItems = () => {
             );
           })}
         </div>
-
-        <p className="text-xl">
-          Total: <span className="text-lg">₹</span> {cartTotal}
-        </p>
-
-        <button className="w-full mt-6 px-4 py-3 bg-green text-white hover:shadow-lg text-center">
-          <Link href="#">
-            <a className="w-full">Checkout</a>
-          </Link>
-        </button>
       </>
     );
 }
