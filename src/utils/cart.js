@@ -1,22 +1,39 @@
-import { useEffect, useState, createContext, useContext } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
-const CartContext = createContext()
+const CartContext = createContext();
 
-export const CartProvider = ({children}) => {
+function useLocalState(key, inital) {
 
-  const [cart, setCart] = useState(() => {
-    try {
-      const data = localStorage.getItem('cart')
-      return data ? JSON.parse(data) : []
-    } catch (e) {
-      return []
+  const [value, setValue] = useState(() => {
+    if(typeof window !== 'undefined') {
+      const saved = window.localStorage.getItem(key)
+      if(saved != null) {
+        return JSON.parse(saved)
+      }
     }
+
+    return inital
   })
-  const [cartTotal, setCartTotal] = useState(0)
 
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart))
-    getTotal();
+    window.localStorage.setItem(key, JSON.stringify(value))
+  }, [value])
+
+  return [value, setValue]
+}
+
+export const CartProvider = ({ children }) => {
+
+  const [cart, setCart] = useLocalState("cart_items", []);
+  const [cartTotal, setCartTotal] = useLocalState("cart_total", 0);
+  const [cartTax, setCartTax] = useLocalState("cart_tax", 0)
+
+  useEffect(() => {
+
+    let total = cart.reduce((sum, item) => sum + item.price * item.count, 0);
+    setCartTotal(total);
+    setCartTax(Math.round(total * 0.18));
+    
   }, [cart]);
 
   const addToCart = (newItem) => {
@@ -68,11 +85,6 @@ export const CartProvider = ({children}) => {
     }
   };
 
-  const getTotal = () => {
-    let total = cart.reduce((sum, item) => sum + item.price * item.count, 0);
-    setCartTotal(total);
-  };
-
   return (
     <CartContext.Provider
       value={{
@@ -80,14 +92,14 @@ export const CartProvider = ({children}) => {
         addToCart,
         removeItem,
         cartTotal,
+        cartTax,
         changeQuantity,
       }}
     >
       {children}
     </CartContext.Provider>
   );
-}
-const useCart = () => useContext(CartContext)
+};
+const useCart = () => useContext(CartContext);
 
-export default useCart
-
+export default useCart;
