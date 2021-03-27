@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import Link from 'next/link'
+import React, { useState } from 'react';
 
 import CartItems from '../components/CartItems'
 import useCart from '../utils/cart';
@@ -23,7 +24,7 @@ const Cafe = ({ pageData, categories, items }) => {
     pageSEO: { title = '', description = '' },
     keywords = [],
   } = pageData
-  const { cart, addToCart } = useCart()
+  const { cart, cartTotal, addToCart } = useCart()
 
   const [menuItems, setMenuItems] = useState(items);
   const [currCategory, setCurrCategory] = useState(categories[0].title);
@@ -126,7 +127,18 @@ const Cafe = ({ pageData, categories, items }) => {
           {cart.length === 0 ? (
             <h3 className="text-4xl mb-10">Your Cart is Empty</h3>
           ) : (
-            <CartItems />
+            <div>
+              <h3 className="text-4xl mb-10">Cart</h3>
+              <CartItems />
+              <p className="text-xl">
+                Total: <span className="text-lg">₹</span> {cartTotal}
+              </p>
+              <button className="w-full mt-6 px-4 py-3 bg-green text-white hover:shadow-lg text-center">
+                <Link href="/checkout">
+                  <a className="w-full">Checkout</a>
+                </Link>
+              </button>
+            </div>
           )}
         </div>
       </section>
