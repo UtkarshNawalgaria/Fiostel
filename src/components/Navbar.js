@@ -40,6 +40,7 @@ const Navbar = () => {
                             </Link>
                         )
                     })}
+
                 </nav>
 
             </div>
