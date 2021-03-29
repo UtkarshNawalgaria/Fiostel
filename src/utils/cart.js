@@ -85,6 +85,12 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  const emptyCart = () => {
+    setCart([])
+    setCartTotal(0)
+    setCartTax(0)
+  }
+
   return (
     <CartContext.Provider
       value={{
@@ -94,6 +100,7 @@ export const CartProvider = ({ children }) => {
         cartTotal,
         cartTax,
         changeQuantity,
+        emptyCart
       }}
     >
       {children}
@@ -102,4 +109,4 @@ export const CartProvider = ({ children }) => {
 };
 const useCart = () => useContext(CartContext);
 
-export default useCart;
+export default useCart
