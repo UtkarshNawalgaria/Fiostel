@@ -10,4 +10,8 @@
     .form-input-error {
         @apply block w-full rounded-sm shadow-sm border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500 text-black;
     }
+
+    .max-container {
+        @apply mx-5 mb-10 md:container md:mx-auto md:max-w-5xl;
+    }
 }

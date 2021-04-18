@@ -8,6 +8,9 @@ module.exports = {
           DEFAULT: '#60B246',
         },
       },
+      backgroundImage: theme => ({
+        'hero-image': "url('/media/hero_banner.jpg')"
+      })
     },
   },
   variants: {

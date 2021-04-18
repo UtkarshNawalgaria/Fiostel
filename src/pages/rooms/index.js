@@ -2,6 +2,7 @@ import Head from 'next/head';
 import client from '../../client';
 import RoomLineItem from '../../components/RoomLineItem';
 
+
 const roomsQuery = `
   *[_type == "room"] {
       _id,

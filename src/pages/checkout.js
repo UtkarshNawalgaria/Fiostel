@@ -44,7 +44,7 @@ export const Checkout = () => {
               </div>
             </div>
           </div>
-          <div className="md:w-1/3 shadow-xl p-4">
+          <div className="md:w-1/3 p-4">
             <div className="h-auto">
               <Heading type="h3" styles="text-4xl mb-10" title="Summary" />
               <CartItems />

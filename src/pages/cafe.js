@@ -155,6 +155,11 @@ export async function getStaticProps() {
     useCdn: false,
   });
 
+  // const [pageData, categories] = await Promise.allSettled([
+  //   client.fetch(`*[_type == "page" && title == "Cafe"][0]`),
+  //   client.fetch('*[_type == "category"] | order(order)'),
+  // ]);
+
   const pageData = await client.fetch(`
     *[_type == "page" && title == "Cafe"][0]
   `);

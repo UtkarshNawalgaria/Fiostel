@@ -1,7 +1,13 @@
-const Button = ({ title = '', url = '', classes = '' }) => {
+import Link from 'next/link'
+
+const Button = ({ title = '', link = '', styles = '' }) => {
 
     return (
-        <button>{title}</button>
+        <button className={styles}>
+            <Link href={link} >
+                <a>{title}</a>
+            </Link>
+        </button>
     )
 }
 

@@ -47,7 +47,7 @@ const Footer = () => {
           {/* Right Position */}
           <div className="sm:w-1/3 sm:p-2 text-center">
             <h3 className="text-xl font-semibold mb-6">Contact Us</h3>
-            <p>Ph: 9999944277</p>
+            <p>Ph: 9312144277</p>
           </div>
         </div>
 
