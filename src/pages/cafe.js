@@ -18,6 +18,34 @@ const publicClient = sanityClient({
 const builder = imageUrlBuilder(publicClient);
 const urlFor = (source) => builder.image(source);
 
+export async function getStaticProps() {
+  const client = sanityClient({
+    projectId: process.env.PROJECT_ID,
+    dataset: process.env.DATASET,
+    useCdn: false,
+  });
+
+  const pageData = await client.fetch(`
+    *[_type == "page" && title == "Cafe"][0]
+  `);
+
+  const categories = await client.fetch(
+    '*[_type == "category"] | order(order)'
+  );
+
+  const items = await client.fetch(
+    `*[_type == 'item' && category._ref == "${categories[0]._id}"]`
+  );
+
+  return {
+    props: {
+      categories,
+      items,
+      pageData,
+    },
+  };
+}
+
 const Cafe = ({ pageData, categories, items }) => {
 
   const {
@@ -148,35 +176,4 @@ const Cafe = ({ pageData, categories, items }) => {
 
 export default Cafe;
 
-export async function getStaticProps() {
-  const client = sanityClient({
-    projectId: process.env.PROJECT_ID,
-    dataset: process.env.DATASET,
-    useCdn: false,
-  });
 
-  // const [pageData, categories] = await Promise.allSettled([
-  //   client.fetch(`*[_type == "page" && title == "Cafe"][0]`),
-  //   client.fetch('*[_type == "category"] | order(order)'),
-  // ]);
-
-  const pageData = await client.fetch(`
-    *[_type == "page" && title == "Cafe"][0]
-  `);
-
-  const categories = await client.fetch(
-    '*[_type == "category"] | order(order)'
-  );
-
-  const items = await client.fetch(
-    `*[_type == 'item' && category._ref == "${categories[0]._id}"]`
-  );
-
-  return {
-    props: {
-      categories,
-      items,
-      pageData,
-    },
-  };
-}

@@ -79,6 +79,7 @@ const About = ({ pageData }) => {
               width={500}
               height={450}
               objectFit="true"
+              alt="Metro near Fiostel"
             />
           </div>
           <div className="md:pl-10 md:flex-1">
@@ -120,6 +121,7 @@ const About = ({ pageData }) => {
               width={500}
               height={450}
               objectFit="true"
+              alt="IAS Institutes near Fiostel"
             />
           </div>
         </div>

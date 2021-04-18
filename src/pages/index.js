@@ -60,11 +60,12 @@ export default function Home({ siteSettings }) {
             width={600}
             height={500}
             objectFit="true"
+            alt="Fiostel Cafe"
           />
         </div>
         <div className="md:w-1/2 md:px-10">
           <div className="text-center md:mr-5 mt-5 md:mt-0">
-            <Image src="/media/cafe-logo.png" width={150} height={100} />
+            <Image src="/media/cafe-logo.png" width={150} height={100} alt="Fiostel Cafe Logo"/>
           </div>
           <div>
             <p className="my-5">
@@ -120,6 +121,7 @@ export default function Home({ siteSettings }) {
             width={700}
             height={600}
             objectFit="true"
+            alt="Life at Fiostel"
           />
         </div>
       </section>
