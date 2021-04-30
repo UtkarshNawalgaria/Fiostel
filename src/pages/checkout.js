@@ -1,13 +1,11 @@
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import { useEffect } from 'react';
 import CartItems from '../components/CartItems';
 import CheckoutForm from '../components/Forms/CheckoutForm';
 import Heading from '../components/Heading';
 import useCart from '../utils/cart';
 
-const stripePromise = loadStripe('pk_test_3SBzBAIoZpAhotxW2LLNKeU400Qu1rj3kD');
 
 export const Checkout = () => {
   const { cart, cartTotal, cartTax } = useCart();
@@ -20,7 +18,13 @@ export const Checkout = () => {
   }, [cart]);
 
   return (
-    <div className="bg-gray-100 py-5">
+    <div>
+      <Head>
+        <title>Checkout - Fiostel</title>
+        <meta name="description" content="" />
+      </Head>
+      <div className="bg-gray-100 py-5">
+      
       <div className="container px-4 container md:mx-auto md:max-w-4xl">
         <section className="text-center py-6">
           <Heading
@@ -38,9 +42,7 @@ export const Checkout = () => {
                 styles={'text-2xl font-semibold pb-4'}
               />
               <div>
-                <Elements stripe={stripePromise}>
                   <CheckoutForm onSuccessfulCheckout={() => router.push('/success')} cartData={{cartTotal, cartTax}}/>
-                </Elements>
               </div>
             </div>
           </div>
@@ -59,6 +61,7 @@ export const Checkout = () => {
         </section>
       </div>
     </div>
+  </div>
   );
 };
 
