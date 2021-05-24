@@ -8,9 +8,6 @@ const ReservationForm = ({ roomSlug: slug }) => (
       name: '',
       email: '',
       phone: '',
-      // date: '',
-      // duration: '1',
-      // roomSlug: slug,
     }}
     validationSchema={reservationSchema}
     onSubmit={(values, actions) => {

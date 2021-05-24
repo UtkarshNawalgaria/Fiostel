@@ -1,19 +1,21 @@
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import axios from 'axios';
 import { Form, Formik } from 'formik';
 import { useState } from 'react';
 import { checkoutSchema } from '../../utils/schema';
+
 // Custom Components
 import Divider from '../Divider';
 import Heading from '../Heading';
 import MyInputField from './MyInputField';
 
 const CheckoutForm = ({ onSuccessfulCheckout, cartData }) => {
-  const stripe = useStripe();
-  const elements = useElements();
 
-  const [checkoutTotal, setCheckoutTotal] = useState(cartData.cartTotal + cartData.cartTax)
   const [checkoutError, setCheckoutError] = useState('');
+
+  function loadRazorpay() {
+    const script = document.createElement('script')
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+    document.body.appendChild(script)
+  }
 
   return (
     <Formik
@@ -29,64 +31,37 @@ const CheckoutForm = ({ onSuccessfulCheckout, cartData }) => {
       validationSchema={checkoutSchema}
       onSubmit={async (values, actions) => {
         actions.setSubmitting(true);
-        if (!stripe || !elements) return;
+        loadRazorpay()
 
-        const cardElement = elements.getElement(CardElement);
-        const { error, paymentMethod } = await stripe.createPaymentMethod({
-          type: 'card',
-          card: cardElement,
-          billing_details: {
-            email: values.email,
-            phone: values.phone,
-            address: {
-              line1: values.place,
-              city: values.city,
-              country: 'IN',
-              postal_code: values.pincode,
-              state: values.state,
-            },
-          },
-        });
-
-        if (error) {
-          setCheckoutError(error.message);
-          return;
-        } else {
-          const { id } = paymentMethod;
-
-          axios
-            .post('/api/payment_intent', {
-              id,
-              amount: checkoutTotal * 100,
-              email: values.email,
+        try {
+          const res = await fetch('/api/razorpay', {
+            method: "POST",
+            body: JSON.stringify({
+              amount: (cartData.cartTotal + cartData.cartTax) * 100,
             })
-            .then(({ data }) => {
-              console.log('Created Payment Intent');
-
-              stripe
-                .confirmCardPayment(data.client_secret, {
-                  payment_method: {
-                    card: elements.getElement(CardElement),
-                  },
-                })
-                .then((result) => {
-                  if (result.error) {
-                    console.log('Payment Intent confirmation failed');
-                    setCheckoutError(result.error.message);
-                    return;
-                  } else {
-                    console.log('Payment Intent Confirmed');
-                    if (result.paymentIntent.status === 'succeeded') {
-                      onSuccessfulCheckout();
-                    }
-                  }
-                });
-            })
-            .catch((err) => {
-              setCheckoutError(err.message);
-              return;
-            });
+          })
+          var { data } = await res.json()
+        } catch(err) {
+          console.log(err.message)
         }
+        
+
+        let options = {
+          key: process.env.NEXT_PUBLIC_RAZORPAY_SECRET_ID,
+          ...data,
+          prefill: {
+            "email": values.email,
+            "contact": values.phone
+          },
+          handler: () => {
+            onSuccessfulCheckout()
+          },
+          notes: {
+            address: `${values.place}, ${values.city}, ${values.state}, ${values.country} - ${values.pincode}`
+          }
+        }
+        const rzp = new Razorpay(options)
+        rzp.open()
       }}
       autoComplete="off"
     >
@@ -157,25 +132,10 @@ const CheckoutForm = ({ onSuccessfulCheckout, cartData }) => {
               </div>
             </div>
             <div className="mb-2 border border-gray-300 p-3">
-              <CardElement
-                options={{
-                  style: {
-                    base: {
-                      fontSize: '16px',
-                      color: '#424770',
-                      '::placeholder': {
-                        color: '#aab7c4',
-                      },
-                    },
-                    invalid: {
-                      color: '#9e2146',
-                    },
-                  },
-                }}
-              />
+              <img src="/media/Blue.png" alt="Razorpay Logo" height="200px"/>
             </div>
             <button
-              disabled={props.isSubmitting || !stripe}
+              disabled={props.isSubmitting}
               type="submit"
               className="disabled:opacity-50 w-full px-4 py-3 bg-green text-white text-center "
             >
