@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { useEffect } from 'react'
 import useCart from '../utils/cart'
+import Head from 'next/head'
 
 const Success = () => {
     const { emptyCart } = useCart()
@@ -12,7 +13,7 @@ const Success = () => {
     return (
         <div>
             <Head>
-                <title>Order Successfull</title>
+                <title>Order Successful</title>
             </Head>
             <h1>Congratulations, Your Payment Was successfull</h1>
         </div>
