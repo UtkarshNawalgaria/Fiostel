@@ -10,4 +10,4 @@
 * A Single Room Page with a Reservation Form(using ***Formik***)
 * Cafe Page listing all the Food Items in the Cafe
 * Cart Functionality implemented
-* Payments using Stripe added in the Checkout Page
+* Payments using Razorpay added in the Checkout Page
