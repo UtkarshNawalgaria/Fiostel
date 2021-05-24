@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import { useEffect } from 'react'
 import useCart from '../utils/cart'
-import Head from 'next/head'
 
 const Success = () => {
     const { emptyCart } = useCart()
