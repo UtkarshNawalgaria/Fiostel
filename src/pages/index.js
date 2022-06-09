@@ -98,8 +98,8 @@ export default function Home({ siteSettings }) {
               title="FEEL LIKE HOME"
               styles="text-4xl font-semibold text-yellow-400 mb-10 text-center pt-5 md:pt-0 md:text-left"
             />
-            <p className="">
-              ​Fiostel brings you pure vegetarian and freshly cooked healthy
+            <p>
+              Fiostel brings you pure vegetarian and freshly cooked healthy
               food which leaves you licking your fingers. Chatting and bonding
               over coffee and bread pakoda, watch your favourite movies and the
               next cricket match in what feels like your very own home theatre,

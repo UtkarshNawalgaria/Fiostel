@@ -11,8 +11,7 @@ const Navbar = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center md:max-w-5xl md:mx-auto">
-        {/* Website Logo */}
+      <div className="flex justify-between items-center md:max-w-5xl mx-auto">
         <div>
           <Link href="/">
             <a>
@@ -25,8 +24,6 @@ const Navbar = () => {
             </a>
           </Link>
         </div>
-
-        {/* Menu Toggle Hamburger Icon */}
         <div
           className={
             'h-8 w-10 md:hidden cursor-pointer ' + (sidebar ? 'hidden' : '')
@@ -55,7 +52,7 @@ const Navbar = () => {
               <Link href={item.path} key={index}>
                 <a
                   key={index}
-                  className="p-3 mx-3 font-semibold text-lg border-b-2 border-transparent hover:border-yellow-300"
+                  className="p-3 mx-3 text-lg font-medium border-b-2 border-transparent hover:border-yellow-300"
                 >
                   {item.title}
                 </a>
