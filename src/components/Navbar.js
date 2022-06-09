@@ -11,7 +11,7 @@ const Navbar = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center md:max-w-6xl mx-auto">
+      <div className="flex justify-between items-center md:max-w-5xl mx-auto">
         <div>
           <Link href="/">
             <a>
