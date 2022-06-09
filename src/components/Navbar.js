@@ -11,7 +11,7 @@ const Navbar = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center md:max-w-7xl md:mx-auto">
+      <div className="flex justify-between items-center md:max-w-6xl mx-auto">
         <div>
           <Link href="/">
             <a>
@@ -52,7 +52,7 @@ const Navbar = () => {
               <Link href={item.path} key={index}>
                 <a
                   key={index}
-                  className="p-3 mx-3 font-semibold text-lg border-b-2 border-transparent hover:border-yellow-300"
+                  className="p-3 mx-3 text-lg font-medium border-b-2 border-transparent hover:border-yellow-300"
                 >
                   {item.title}
                 </a>
