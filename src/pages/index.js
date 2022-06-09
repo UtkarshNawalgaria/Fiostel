@@ -73,7 +73,7 @@ export default function Home({ siteSettings }) {
               makhani dal and jeera rice?
             </p>
             <p className="">
-              ​Fiostel brings you pure vegetarian and freshly cooked healthy
+              Fiostel brings you pure vegetarian and freshly cooked healthy
               food which leaves you licking your fingers. Chatting and bonding
               over coffee and bread pakoda, watch your favourite movies and the
               next cricket match in what feels like your very own home theatre,

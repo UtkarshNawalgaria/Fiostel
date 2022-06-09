@@ -1,10 +1,9 @@
-// Next.js Imports
 import Head from 'next/head';
 import Image from 'next/image';
 import client from '../../client';
 import Amenities from '../../components/data/services';
 import Divider from '../../components/Divider';
-// Components
+
 import ReservationForm from '../../components/Forms/ReservationForm';
 import Heading from '../../components/Heading';
 

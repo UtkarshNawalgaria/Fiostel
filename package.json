@@ -17,18 +17,19 @@
     "axios": "^0.21.1",
     "formik": "^2.2.6",
     "nanoid": "^3.1.22",
-    "next": "10.0.7",
+    "next": "12",
     "razorpay": "^2.0.6",
-    "react": "17.0.1",
-    "react-dom": "17.0.1",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
     "react-icons": "^4.2.0",
     "react-social-icons": "^4.1.0",
     "stripe": "^8.139.0",
     "yup": "^0.32.9"
   },
   "prettier": {
-    "tabwidth": 4,
-    "singleQuote": true
+    "tabwidth": 2,
+    "singleQuote": true,
+    "semi": false
   },
   "devDependencies": {
     "autoprefixer": "^10.2.4",

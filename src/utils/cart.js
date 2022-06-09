@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 const CartContext = createContext();
 
-function useLocalState(key, inital) {
+function useLocalStorage(key, inital) {
 
   const [value, setValue] = useState(() => {
     if(typeof window !== 'undefined') {
@@ -24,9 +24,9 @@ function useLocalState(key, inital) {
 
 export const CartProvider = ({ children }) => {
 
-  const [cart, setCart] = useLocalState("cart_items", []);
-  const [cartTotal, setCartTotal] = useLocalState("cart_total", 0);
-  const [cartTax, setCartTax] = useLocalState("cart_tax", 0)
+  const [cart, setCart] = useLocalStorage("cart_items", []);
+  const [cartTotal, setCartTotal] = useLocalStorage("cart_total", 0);
+  const [cartTax, setCartTax] = useLocalStorage("cart_tax", 0)
 
   useEffect(() => {
 
