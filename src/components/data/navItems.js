@@ -9,14 +9,14 @@ export default [
         title: "Cafe",
         path: "/cafe"
     },
-    // {
-    //     id: 3,
-    //     title: "About Us",
-    //     path: "/about"
-    // },
-    // {
-    //     id: 4,
-    //     title: "Contact Us",
-    //     path: "/contact"
-    // },
+    {
+        id: 3,
+        title: "About Us",
+        path: "/about"
+    },
+    {
+        id: 4,
+        title: "Contact Us",
+        path: "/contact"
+    },
 ]

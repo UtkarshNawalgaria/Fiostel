@@ -11,8 +11,7 @@ const Navbar = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center md:max-w-5xl md:mx-auto">
-        {/* Website Logo */}
+      <div className="flex justify-between items-center md:max-w-7xl md:mx-auto">
         <div>
           <Link href="/">
             <a>
@@ -25,8 +24,6 @@ const Navbar = () => {
             </a>
           </Link>
         </div>
-
-        {/* Menu Toggle Hamburger Icon */}
         <div
           className={
             'h-8 w-10 md:hidden cursor-pointer ' + (sidebar ? 'hidden' : '')
