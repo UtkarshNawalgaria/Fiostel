@@ -1,41 +1,39 @@
-import Head from 'next/head';
-import Image from 'next/image';
+import Head from 'next/head'
+import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 import CartItems from '../components/CartItems'
-import useCart from '../utils/cart';
+import useCart from '../utils/cart'
 
-import sanityClient from '@sanity/client';
-import imageUrlBuilder from '@sanity/image-url';
+import sanityClient from '@sanity/client'
+import imageUrlBuilder from '@sanity/image-url'
 
 const publicClient = sanityClient({
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
   dataset: process.env.NEXT_PUBLIC_DATASET,
   useCdn: false,
-});
+})
 
-const builder = imageUrlBuilder(publicClient);
-const urlFor = (source) => builder.image(source);
+const builder = imageUrlBuilder(publicClient)
+const urlFor = (source) => builder.image(source)
 
 export async function getStaticProps() {
   const client = sanityClient({
     projectId: process.env.PROJECT_ID,
     dataset: process.env.DATASET,
     useCdn: false,
-  });
+  })
 
   const pageData = await client.fetch(`
     *[_type == "page" && title == "Cafe"][0]
-  `);
+  `)
 
-  const categories = await client.fetch(
-    '*[_type == "category"] | order(order)'
-  );
+  const categories = await client.fetch('*[_type == "category"] | order(order)')
 
   const items = await client.fetch(
     `*[_type == 'item' && category._ref == "${categories[0]._id}"]`
-  );
+  )
 
   return {
     props: {
@@ -43,28 +41,27 @@ export async function getStaticProps() {
       items,
       pageData,
     },
-  };
+  }
 }
 
 const Cafe = ({ pageData, categories, items }) => {
-
   const {
     pageSEO: { title = '', description = '' },
     keywords = [],
   } = pageData
   const { cart, cartTotal, addToCart } = useCart()
 
-  const [menuItems, setMenuItems] = useState(items);
-  const [currCategory, setCurrCategory] = useState(categories[0].title);
-  const [loading, setLoading] = useState(false);
+  const [menuItems, setMenuItems] = useState(items)
+  const [currCategory, setCurrCategory] = useState(categories[0].title)
+  const [loading, setLoading] = useState(false)
 
   async function getMenuItems(e, id) {
     setLoading(true)
     const nitems = await publicClient.fetch(
       `*[_type == 'item' && category._ref == "${id}"]`
-    );
+    )
     setLoading(false)
-    setMenuItems(nitems);
+    setMenuItems(nitems)
   }
 
   return (
@@ -89,15 +86,15 @@ const Cafe = ({ pageData, categories, items }) => {
               >
                 <button
                   onClick={(e) => {
-                    setCurrCategory(category.title);
-                    getMenuItems(e, category._id);
+                    setCurrCategory(category.title)
+                    getMenuItems(e, category._id)
                   }}
                   className="pr-2"
                 >
                   {category.title}
                 </button>
               </div>
-            );
+            )
           })}
         </aside>
 
@@ -144,7 +141,7 @@ const Cafe = ({ pageData, categories, items }) => {
                       </div>
                     </div>
                   </div>
-                );
+                )
               })}
             </>
           )}
@@ -171,9 +168,7 @@ const Cafe = ({ pageData, categories, items }) => {
         </div>
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default Cafe;
-
-
+export default Cafe

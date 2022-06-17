@@ -1,6 +1,6 @@
-import Layout from '../components/layout';
-import '../styles/globals.css';
-import { CartProvider } from '../utils/cart';
+import Layout from '../components/layout'
+import '../styles/globals.css'
+import { CartProvider } from '../utils/cart'
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }) {
         <Component {...pageProps} />
       </Layout>
     </CartProvider>
-  );
+  )
 }
 
-export default MyApp;
+export default MyApp

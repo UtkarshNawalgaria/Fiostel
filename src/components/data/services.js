@@ -1,4 +1,4 @@
-import { FaWifi, FaToilet, FaTemperatureHigh, FaShower } from 'react-icons/fa';
+import { FaWifi, FaToilet, FaTemperatureHigh, FaShower } from 'react-icons/fa'
 import { GiTable } from 'react-icons/gi'
 import { HiOutlineHome } from 'react-icons/hi'
 
@@ -33,4 +33,4 @@ export default [
     icon: <FaWifi className="h-12 w-12" />,
     icon_small: <FaWifi className="h-6 w-6" />,
   },
-];
+]

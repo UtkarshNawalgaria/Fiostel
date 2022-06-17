@@ -1,17 +1,17 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import client from '../client';
-import Heading from '../components/Heading';
+import Head from 'next/head'
+import Image from 'next/image'
+import client from '../client'
+import Heading from '../components/Heading'
 
 const pageQuery = `
   *[_type == "page" && title == "About Us"][0]
-`;
+`
 
 const About = ({ pageData }) => {
   const {
     pageSEO: { title = '', description = '' },
     keywords = [],
-  } = pageData;
+  } = pageData
 
   return (
     <div>
@@ -127,17 +127,17 @@ const About = ({ pageData }) => {
         </div>
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default About;
+export default About
 
 export async function getStaticProps() {
-  const pageData = await client.fetch(pageQuery);
+  const pageData = await client.fetch(pageQuery)
 
   return {
     props: {
       pageData,
     },
-  };
+  }
 }

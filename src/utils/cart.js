@@ -1,13 +1,12 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react'
 
-const CartContext = createContext();
+const CartContext = createContext()
 
 function useLocalStorage(key, inital) {
-
   const [value, setValue] = useState(() => {
-    if(typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') {
       const saved = window.localStorage.getItem(key)
-      if(saved != null) {
+      if (saved != null) {
         return JSON.parse(saved)
       }
     }
@@ -23,47 +22,44 @@ function useLocalStorage(key, inital) {
 }
 
 export const CartProvider = ({ children }) => {
-
-  const [cart, setCart] = useLocalStorage("cart_items", []);
-  const [cartTotal, setCartTotal] = useLocalStorage("cart_total", 0);
-  const [cartTax, setCartTax] = useLocalStorage("cart_tax", 0)
+  const [cart, setCart] = useLocalStorage('cart_items', [])
+  const [cartTotal, setCartTotal] = useLocalStorage('cart_total', 0)
+  const [cartTax, setCartTax] = useLocalStorage('cart_tax', 0)
 
   useEffect(() => {
-
-    let total = cart.reduce((sum, item) => sum + item.price * item.count, 0);
-    setCartTotal(total);
-    setCartTax(Math.round(total * 0.18));
-    
-  }, [cart]);
+    let total = cart.reduce((sum, item) => sum + item.price * item.count, 0)
+    setCartTotal(total)
+    setCartTax(Math.round(total * 0.18))
+  }, [cart])
 
   const addToCart = (newItem) => {
     setCart((oldCart) => {
       if (oldCart.length === 0) {
-        return [{ ...newItem, count: 1 }];
+        return [{ ...newItem, count: 1 }]
       } else {
-        let itemFound = false;
+        let itemFound = false
 
         const newCart = oldCart.map((item) => {
           if (item._id === newItem._id) {
-            itemFound = true;
-            item.count += 1;
-            return item;
+            itemFound = true
+            item.count += 1
+            return item
           } else {
-            return item;
+            return item
           }
-        });
+        })
         if (!itemFound) {
-          newCart.push({ ...newItem, count: 1 });
+          newCart.push({ ...newItem, count: 1 })
         }
-        return newCart;
+        return newCart
       }
-    });
-  };
+    })
+  }
 
   const removeItem = (id) => {
-    const newCart = cart.filter((item) => item._id != id);
-    setCart(newCart);
-  };
+    const newCart = cart.filter((item) => item._id != id)
+    setCart(newCart)
+  }
 
   const changeQuantity = (itemId, type) => {
     switch (type) {
@@ -71,19 +67,19 @@ export const CartProvider = ({ children }) => {
         setCart((oldCart) => {
           return oldCart.map((item) =>
             item._id === itemId ? { ...item, count: item.count + 1 } : item
-          );
-        });
+          )
+        })
 
-        break;
+        break
       case 'DECREASE':
         setCart((oldCart) => {
           return oldCart.map((item) =>
             item._id === itemId ? { ...item, count: item.count - 1 } : item
-          );
-        });
-        break;
+          )
+        })
+        break
     }
-  };
+  }
 
   const emptyCart = () => {
     setCart([])
@@ -100,13 +96,13 @@ export const CartProvider = ({ children }) => {
         cartTotal,
         cartTax,
         changeQuantity,
-        emptyCart
+        emptyCart,
       }}
     >
       {children}
     </CartContext.Provider>
-  );
-};
-const useCart = () => useContext(CartContext);
+  )
+}
+const useCart = () => useContext(CartContext)
 
 export default useCart

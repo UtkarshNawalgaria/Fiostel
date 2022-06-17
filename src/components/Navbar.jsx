@@ -1,13 +1,13 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
-import NavItems from './data/navItems';
-import Sidebar from './Sidebar';
+import Image from 'next/image'
+import Link from 'next/link'
+import { useState } from 'react'
+import NavItems from './data/navItems'
+import Sidebar from './Sidebar'
 
 const Navbar = () => {
-  const [sidebar, setSidebar] = useState(false);
+  const [sidebar, setSidebar] = useState(false)
 
-  const showSidebar = () => setSidebar(!sidebar);
+  const showSidebar = () => setSidebar(!sidebar)
 
   return (
     <div>
@@ -57,7 +57,7 @@ const Navbar = () => {
                   {item.title}
                 </a>
               </Link>
-            );
+            )
           })}
         </nav>
       </div>
@@ -75,12 +75,12 @@ const Navbar = () => {
                   <a>{item.title}</a>
                 </Link>
               </div>
-            );
+            )
           })}
         </div>
       </Sidebar>
     </div>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

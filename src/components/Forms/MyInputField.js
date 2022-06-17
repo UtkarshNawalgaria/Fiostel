@@ -1,7 +1,7 @@
 import { useField } from 'formik'
 
 const MyInputField = ({ label, ...props }) => {
-  const [field, meta] = useField(props);
+  const [field, meta] = useField(props)
   return (
     <div className="mb-2">
       <label>
@@ -20,7 +20,7 @@ const MyInputField = ({ label, ...props }) => {
         </div>
       ) : null}
     </div>
-  );
-};
+  )
+}
 
 export default MyInputField

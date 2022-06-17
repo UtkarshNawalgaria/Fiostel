@@ -1,15 +1,14 @@
-import { Form, Formik } from 'formik';
-import { useState } from 'react';
-import { checkoutSchema } from '../../utils/schema';
+import { Form, Formik } from 'formik'
+import { useState } from 'react'
+import { checkoutSchema } from '../../utils/schema'
 
 // Custom Components
-import Divider from '../Divider';
-import Heading from '../Heading';
-import MyInputField from './MyInputField';
+import Divider from '../Divider'
+import Heading from '../Heading'
+import MyInputField from './MyInputField'
 
 const CheckoutForm = ({ onSuccessfulCheckout, cartData }) => {
-
-  const [checkoutError, setCheckoutError] = useState('');
+  const [checkoutError, setCheckoutError] = useState('')
 
   function loadRazorpay() {
     const script = document.createElement('script')
@@ -30,35 +29,34 @@ const CheckoutForm = ({ onSuccessfulCheckout, cartData }) => {
       }}
       validationSchema={checkoutSchema}
       onSubmit={async (values, actions) => {
-        actions.setSubmitting(true);
+        actions.setSubmitting(true)
         loadRazorpay()
 
         try {
           const res = await fetch('/api/razorpay', {
-            method: "POST",
+            method: 'POST',
             body: JSON.stringify({
               amount: (cartData.cartTotal + cartData.cartTax) * 100,
-            })
+            }),
           })
           var { data } = await res.json()
-        } catch(err) {
+        } catch (err) {
           console.log(err.message)
         }
-        
 
         let options = {
           key: process.env.NEXT_PUBLIC_RAZORPAY_SECRET_ID,
           ...data,
           prefill: {
-            "email": values.email,
-            "contact": values.phone
+            email: values.email,
+            contact: values.phone,
           },
           handler: () => {
             onSuccessfulCheckout()
           },
           notes: {
-            address: `${values.place}, ${values.city}, ${values.state}, ${values.country} - ${values.pincode}`
-          }
+            address: `${values.place}, ${values.city}, ${values.state}, ${values.country} - ${values.pincode}`,
+          },
         }
         const rzp = new Razorpay(options)
         rzp.open()
@@ -67,7 +65,9 @@ const CheckoutForm = ({ onSuccessfulCheckout, cartData }) => {
     >
       {(props) => (
         <Form {...props}>
-          {checkoutError ? <h2 className="mb-2 text-red-600">{checkoutError}</h2> : null}
+          {checkoutError ? (
+            <h2 className="mb-2 text-red-600">{checkoutError}</h2>
+          ) : null}
           <div className="md:w-2/3">
             {/* Contact Information */}
             <div className="mb-6">
@@ -132,7 +132,7 @@ const CheckoutForm = ({ onSuccessfulCheckout, cartData }) => {
               </div>
             </div>
             <div className="mb-2 border border-gray-300 p-3">
-              <img src="/media/Blue.png" alt="Razorpay Logo" height="200px"/>
+              <img src="/media/Blue.png" alt="Razorpay Logo" height="200px" />
             </div>
             <button
               disabled={props.isSubmitting}
@@ -145,7 +145,7 @@ const CheckoutForm = ({ onSuccessfulCheckout, cartData }) => {
         </Form>
       )}
     </Formik>
-  );
-};
+  )
+}
 
-export default CheckoutForm;
+export default CheckoutForm

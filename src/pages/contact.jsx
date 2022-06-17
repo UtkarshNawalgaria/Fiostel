@@ -1,16 +1,16 @@
-import Head from 'next/head';
+import Head from 'next/head'
 
-import client from '../client';
+import client from '../client'
 
 const pageQuery = `
   *[_type == "page" && title == "Contact Us"][0]
-`;
+`
 
 const Contact = ({ pageData }) => {
-
-    const {
-      pageSEO: { title = '', description = '' }, keywords = []
-    } = pageData
+  const {
+    pageSEO: { title = '', description = '' },
+    keywords = [],
+  } = pageData
 
   return (
     <div>
@@ -21,13 +21,13 @@ const Contact = ({ pageData }) => {
       </Head>
       <h1>{pageData.title}</h1>
     </div>
-  );
-};
+  )
+}
 
 export default Contact
 
 export async function getStaticProps() {
-  const pageData = await client.fetch(pageQuery);
+  const pageData = await client.fetch(pageQuery)
 
   return {
     props: {

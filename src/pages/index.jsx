@@ -1,17 +1,17 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import client from '../client';
-import Button from '../components/Button';
-import Heading from '../components/Heading';
+import Head from 'next/head'
+import Image from 'next/image'
+import client from '../client'
+import Button from '../components/Button'
+import Heading from '../components/Heading'
 
 export async function getStaticProps() {
-  const siteSettings = await client.fetch(`*[_type == 'siteSettings'][0]`);
+  const siteSettings = await client.fetch(`*[_type == 'siteSettings'][0]`)
 
   return {
     props: {
       siteSettings,
     },
-  };
+  }
 }
 
 export default function Home({ siteSettings }) {
@@ -65,7 +65,12 @@ export default function Home({ siteSettings }) {
         </div>
         <div className="md:w-1/2 md:px-10">
           <div className="text-center md:mr-5 mt-5 md:mt-0">
-            <Image src="/media/cafe-logo.png" width={150} height={100} alt="Fiostel Cafe Logo"/>
+            <Image
+              src="/media/cafe-logo.png"
+              width={150}
+              height={100}
+              alt="Fiostel Cafe Logo"
+            />
           </div>
           <div>
             <p className="my-5">
@@ -73,11 +78,11 @@ export default function Home({ siteSettings }) {
               makhani dal and jeera rice?
             </p>
             <p className="">
-              Fiostel brings you pure vegetarian and freshly cooked healthy
-              food which leaves you licking your fingers. Chatting and bonding
-              over coffee and bread pakoda, watch your favourite movies and the
-              next cricket match in what feels like your very own home theatre,
-              only in Fiostel Cafe.
+              Fiostel brings you pure vegetarian and freshly cooked healthy food
+              which leaves you licking your fingers. Chatting and bonding over
+              coffee and bread pakoda, watch your favourite movies and the next
+              cricket match in what feels like your very own home theatre, only
+              in Fiostel Cafe.
             </p>
           </div>
           <div className="flex justify-center pt-10">
@@ -99,11 +104,11 @@ export default function Home({ siteSettings }) {
               styles="text-4xl font-semibold text-yellow-400 mb-10 text-center pt-5 md:pt-0 md:text-left"
             />
             <p>
-              Fiostel brings you pure vegetarian and freshly cooked healthy
-              food which leaves you licking your fingers. Chatting and bonding
-              over coffee and bread pakoda, watch your favourite movies and the
-              next cricket match in what feels like your very own home theatre,
-              only in Fiostel Cafe.
+              Fiostel brings you pure vegetarian and freshly cooked healthy food
+              which leaves you licking your fingers. Chatting and bonding over
+              coffee and bread pakoda, watch your favourite movies and the next
+              cricket match in what feels like your very own home theatre, only
+              in Fiostel Cafe.
             </p>
           </div>
           <div className="flex justify-center md:flex-none md:justify-start pt-10">
@@ -126,5 +131,5 @@ export default function Home({ siteSettings }) {
         </div>
       </section>
     </div>
-  );
+  )
 }

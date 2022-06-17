@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import social from './data/social';
+import Link from 'next/link'
+import social from './data/social'
 
 const Footer = () => {
   return (
@@ -26,13 +26,13 @@ const Footer = () => {
           <div className="sm:w-1/3 sm:p-2 text-center">
             <h3 className="text-xl font-semibold mb-6">REACH US AT</h3>
             {/* Social Links */}
-            <div className="my-4">
+            <div className="my-8 flex items-center justify-center mx-auto">
               {social.map((media) => {
                 return (
                   <Link href={media.url} key={media.id}>
                     <a className="mx-2">{media.icon}</a>
                   </Link>
-                );
+                )
               })}
             </div>
             <div className="mt-6">
@@ -58,7 +58,7 @@ const Footer = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

@@ -1,4 +1,4 @@
-import { Formik, Form } from 'formik';
+import { Formik, Form } from 'formik'
 import MyInputField from './MyInputField'
 import { reservationSchema } from '../../utils/schema'
 
@@ -11,11 +11,11 @@ const ReservationForm = ({ roomSlug: slug }) => (
     }}
     validationSchema={reservationSchema}
     onSubmit={(values, actions) => {
-      console.log("After submitting")
+      console.log('After submitting')
       setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        actions.setSubmitting(false);
-      }, 1000);
+        alert(JSON.stringify(values, null, 2))
+        actions.setSubmitting(false)
+      }, 1000)
     }}
     autoComplete="off"
   >
@@ -53,7 +53,6 @@ const ReservationForm = ({ roomSlug: slug }) => (
       </Form>
     )}
   </Formik>
-);
+)
 
-
-export default ReservationForm;
+export default ReservationForm
