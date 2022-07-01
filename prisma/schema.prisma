@@ -12,7 +12,144 @@ datasource db {
   referentialIntegrity = "prisma"
 }
 
-model Test {
-  id Int @id @default(autoincrement())
-  title String?
+enum RoomType {
+  SINGLE
+  DOUBLE
+  TRIPLE
+  DORMITORY
+}
+
+enum LocationStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum RoomStatus {
+  BOOKED
+  AVAILABLE
+}
+
+enum BookingStatus {
+  RESERVED
+  CONFIRMED
+}
+
+enum Role {
+  STAFF
+  GUEST
+}
+
+// User Auth related data
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  phone     String   @db.VarChar(10)
+  role      Role     @default(GUEST)
+  guest     Guest?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Guest specific data
+model Guest {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @unique
+  bookings  Booking[]
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Media {
+  id       String    @id @default(uuid())
+  room     Room?
+  location Location?
+  images   Image[]
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  publicId  String   @unique
+  mediaId   String
+  format    String
+  amenity   Amenity?
+  media     Media    @relation(fields: [mediaId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Location {
+  id        Int            @id @default(autoincrement())
+  mediaId   String         @unique
+  title     String         @db.VarChar(100)
+  slug      String
+  status    LocationStatus @default(ACTIVE)
+  rooms     Room[]
+  media     Media          @relation(fields: [mediaId], references: [id])
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model Room {
+  id          Int                @id @default(autoincrement())
+  name        String             @db.VarChar(50)
+  description String?            @db.LongText
+  costPerDay  Decimal
+  mediaId     String             @unique
+  locationId  Int
+  type        RoomType           @default(SINGLE)
+  amenities   AmenitiesInRooms[]
+  units       RoomUnit[]
+  status      RoomStatus         @default(AVAILABLE)
+  media       Media              @relation(fields: [mediaId], references: [id])
+  location    Location           @relation(fields: [locationId], references: [id])
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model RoomUnit {
+  id         Int  @id @default(autoincrement())
+  roomNumber Int
+  room       Room @relation(fields: [roomId], references: [id])
+  roomId     Int
+
+  bookings  Booking[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Amenity {
+  id      Int                @id @default(autoincrement())
+  name    String
+  code    String             @db.VarChar(10)
+  rooms   AmenitiesInRooms[]
+  image   Image              @relation(fields: [imageId], references: [id])
+  imageId String             @unique
+}
+
+model AmenitiesInRooms {
+  room      Room     @relation(fields: [roomId], references: [id])
+  roomId    Int
+  amenity   Amenity  @relation(fields: [amenityId], references: [id])
+  amenityId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([roomId, amenityId])
+}
+
+model Booking {
+  id        Int           @id @default(autoincrement())
+  guestId   Int
+  unitId    Int
+  guest     Guest?        @relation(fields: [guestId], references: [id])
+  unit      RoomUnit      @relation(fields: [unitId], references: [id])
+
+  numberOfBeds Int
+  status    BookingStatus @default(RESERVED)
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 }
