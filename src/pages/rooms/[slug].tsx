@@ -6,6 +6,7 @@ import Divider from '../../components/Divider';
 
 import ReservationForm from '../../components/Forms/ReservationForm';
 import Heading from '../../components/Heading';
+import Service from '../../components/Service';
 
 export async function getStaticPaths() {
   const rooms = await client.fetch(`*[_type == "room"] { slug }`);
@@ -82,7 +83,7 @@ const SingleRoom = ({ room }) => {
           <div className="grid grid-cols-2 gap-1 md:gap-y-6 mb-4">
             {Amenities.map((item, idx) => (
               <div key={idx} className="flex gap-2">
-                <div>{item.icon}</div>
+                <div><Service icon={item.icon}/></div>
                 <p>{item.title}</p>
               </div>
             ))}

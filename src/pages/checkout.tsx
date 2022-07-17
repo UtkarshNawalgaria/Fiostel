@@ -23,7 +23,7 @@ export const Checkout = () => {
         <meta name="description" content="" />
       </Head>
       <div className="bg-gray-100 py-5">
-        <div className="container px-4 container md:mx-auto md:max-w-4xl">
+        <div className="container px-4 md:mx-auto md:max-w-4xl">
           <section className="text-center py-6">
             <Heading
               title={'Checkout Page'}

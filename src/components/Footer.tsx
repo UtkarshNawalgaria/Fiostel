@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import social from './data/social'
+import Socials from './Socials'
 
 const Footer = () => {
   return (
@@ -27,10 +28,10 @@ const Footer = () => {
             <h3 className="text-xl font-semibold mb-6">REACH US AT</h3>
             {/* Social Links */}
             <div className="my-8 flex items-center justify-center mx-auto">
-              {social.map((media) => {
+              {social.map((link) => {
                 return (
-                  <Link href={media.url} key={media.id}>
-                    <a className="mx-2">{media.icon}</a>
+                  <Link href={link.url} key={link.id}>
+                    <a className="mx-2"><Socials icon={link.icon} style={link.style}/></a>
                   </Link>
                 )
               })}

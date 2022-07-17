@@ -6,7 +6,7 @@ const CartItems = () => {
   return (
     <>
       <div>
-        {cart.map((cartItem, idx) => {
+        {cart.map((cartItem: any, idx: number) => {
           return (
             <div key={idx} className="flex justify-between mb-4">
               <div>{cartItem.item_name}</div>

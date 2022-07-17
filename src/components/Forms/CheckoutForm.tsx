@@ -7,7 +7,18 @@ import Divider from '../Divider'
 import Heading from '../Heading'
 import MyInputField from './MyInputField'
 
-const CheckoutForm = ({ onSuccessfulCheckout, cartData }) => {
+interface CheckoutFormProps {
+  onSuccessfulCheckout: () => void
+  cartData: {
+    cartTotal: number
+    cartTax: number
+  }
+}
+
+const CheckoutForm = ({
+  onSuccessfulCheckout,
+  cartData,
+}: CheckoutFormProps) => {
   const [checkoutError, setCheckoutError] = useState('')
 
   function loadRazorpay() {

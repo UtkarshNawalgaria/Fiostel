@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import Services from './data/services'
+import Service from './Service'
 
 const RoomLineItem = ({ room }) => {
   return (
@@ -31,7 +32,7 @@ const RoomLineItem = ({ room }) => {
         <div className="services my-2 flex justify-items-center">
           {Services.map((item, idx) => (
             <div key={idx} className="mr-4 align-center">
-              {item.icon_small}
+              <Service icon={item.icon} isSmall={true} />
             </div>
           ))}
         </div>

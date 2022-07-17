@@ -1,3 +1,4 @@
+import { NextApiRequest, NextApiResponse } from 'next'
 import { nanoid } from 'nanoid'
 import client from '../../lib/razorpay'
 

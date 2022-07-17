@@ -1,7 +1,8 @@
+import { ReactNode } from 'react'
 import Footer from './Footer'
 import Navbar from './Navbar'
 
-const Layout = ({ children }) => {
+const Layout = ({ children }: { children: ReactNode}) => {
   return (
     <>
       <header className="p-3 border-b-2">
