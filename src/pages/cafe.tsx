@@ -4,7 +4,7 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 
 import CartItems from '../components/CartItems'
-import useCart from '../utils/cart'
+import useCart from '../context/cart.context'
 
 import sanityClient from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
@@ -16,7 +16,30 @@ const publicClient = sanityClient({
 })
 
 const builder = imageUrlBuilder(publicClient)
-const urlFor = (source) => builder.image(source)
+const urlFor = (source: string) => builder.image(source)
+
+interface Slug {
+  _type: string
+  current: string
+}
+
+interface Metadata {
+  _id: string
+  _createdAt: string
+  _rev: string
+  _type: string
+  _updatedAt: string
+  slug: Slug
+}
+
+interface Category extends Metadata{
+  order: number
+  title: string
+}
+
+interface Item extends Metadata {
+
+}
 
 export async function getStaticProps() {
   const client = sanityClient({
@@ -25,37 +48,28 @@ export async function getStaticProps() {
     useCdn: false,
   })
 
-  const pageData = await client.fetch(`
-    *[_type == "page" && title == "Cafe"][0]
-  `)
-
-  const categories = await client.fetch('*[_type == "category"] | order(order)')
+  const categories = await client.fetch('*[_type == "category"] | order(order)') as Category[]
 
   const items = await client.fetch(
     `*[_type == 'item' && category._ref == "${categories[0]._id}"]`
-  )
+  ) as Item[]
 
   return {
     props: {
       categories,
       items,
-      pageData,
     },
   }
 }
 
-const Cafe = ({ pageData, categories, items }) => {
-  const {
-    pageSEO: { title = '', description = '' },
-    keywords = [],
-  } = pageData
-  const { cart, cartTotal, addToCart } = useCart()
+const Cafe = ({ categories, items }: {categories: Category[], items: Item[]}) => {
+  const { cart, cartTotal, addToCart } = useCart() as any
 
   const [menuItems, setMenuItems] = useState(items)
-  const [currCategory, setCurrCategory] = useState(categories[0].title)
-  const [loading, setLoading] = useState(false)
+  const [currCategory, setCurrCategory] = useState<string>(categories[0].title)
+  const [loading, setLoading] = useState<boolean>(false)
 
-  async function getMenuItems(e, id) {
+  async function getMenuItems(e: any, id: string) {
     setLoading(true)
     const nitems = await publicClient.fetch(
       `*[_type == 'item' && category._ref == "${id}"]`
@@ -67,9 +81,8 @@ const Cafe = ({ pageData, categories, items }) => {
   return (
     <div className="container mx-auto my-10">
       <Head>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta name="keywords" content={keywords.join(', ')} />
+        <title>Cafe | Fiostel - Boys PG in Karol Bagh</title>
+        <meta name="description" content="" />
       </Head>
       <section className="mb-10 text-center">
         <h1 className="text-6xl">Fiostel Cafe</h1>
@@ -105,14 +118,14 @@ const Cafe = ({ pageData, categories, items }) => {
             <h1>Items Loading</h1>
           ) : (
             <>
-              {menuItems.map((item, idx) => {
+              {menuItems.map((item: any, idx: number) => {
                 return (
                   <div key={idx}>
                     <div className="flex pb-4 mb-4 border-b-2">
                       {/* Food Image */}
                       <div className="w-auto">
                         <Image
-                          src={urlFor(item.image).url()}
+                          src={urlFor(item.image).url() || "#"}
                           height={150}
                           width={150}
                           objectFit="cover"

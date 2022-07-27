@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { nanoid } from 'nanoid'
 import client from '../../lib/razorpay'
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const { amount } = JSON.parse(req.body)
     const options = {
@@ -11,6 +11,7 @@ export default async (req, res) => {
         receipt: `order_${nanoid()}`,
         payment_capture: 1
     }
+    
     try {
         const response = await client.orders.create(options)
         res.status(200).json({

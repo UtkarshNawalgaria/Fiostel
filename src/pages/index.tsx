@@ -1,25 +1,20 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import client from '../client'
 import Button from '../components/Button'
 import Heading from '../components/Heading'
 
 export async function getStaticProps() {
-  const siteSettings = await client.fetch(`*[_type == 'siteSettings'][0]`)
-
   return {
-    props: {
-      siteSettings,
-    },
+    props: {},
   }
 }
 
-export default function Home({ siteSettings }) {
+export default function Home() {
   return (
     <div>
       <Head>
-        <title>{siteSettings.title}</title>
-        <meta name="description" content={siteSettings.description} />
+        <title>Fiostel - Home away from Home</title>
+        <meta name="description" content="PG in Karol Bagh" />
       </Head>
       <section className="bg-hero-image bg-no-repeat bg-cover bg-center py-5 md:py-0">
         <div className="max-container md:flex md:pt-40 md:pb-60">
@@ -59,7 +54,6 @@ export default function Home({ siteSettings }) {
             src="/media/cafe_image.jpg"
             width={600}
             height={500}
-            objectFit="true"
             alt="Fiostel Cafe"
           />
         </div>
@@ -125,7 +119,6 @@ export default function Home({ siteSettings }) {
             src="/media/fiostel_home.jpg"
             width={700}
             height={600}
-            objectFit="true"
             alt="Life at Fiostel"
           />
         </div>

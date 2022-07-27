@@ -1,56 +1,71 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import client from '../../client';
-import Amenities from '../../components/data/services';
-import Divider from '../../components/Divider';
+import Head from 'next/head'
+import Image from 'next/image'
+import Amenities from '../../components/data/services'
+import Divider from '../../components/Divider'
 
-import ReservationForm from '../../components/Forms/ReservationForm';
-import Heading from '../../components/Heading';
-import Service from '../../components/Service';
+import ReservationForm from '../../components/Forms/ReservationForm'
+import Heading from '../../components/Heading'
+import Service from '../../components/Service'
+import prisma from '../../utils/prisma'
+import { modifyRoomData } from '../../utils/common'
+import superjson from 'superjson'
 
 export async function getStaticPaths() {
-  const rooms = await client.fetch(`*[_type == "room"] { slug }`);
+  const rooms = await prisma.room.findMany({
+    select: {
+      slug: true,
+    },
+  })
 
-  const paths = rooms.map((room) => ({
-    params: { slug: room.slug.current },
-  }));
+  const paths = rooms?.map((room) => ({
+    params: { slug: room.slug },
+  }))
 
   return {
     paths,
     fallback: false,
-  };
+  }
 }
 
-export async function getStaticProps({ params }) {
-  const { slug } = params;
-
-  const room = await client
-    .fetch(
-      `*[_type == "room" && slug.current == '${slug}'] {..., "imageUrl": image.asset->url}`
-    )
-    .then((data) => data[0]);
+export async function getStaticProps(context: { params: { slug: any } }) {
+  const { slug } = context.params
+  const room = await prisma.room.findUnique({
+    where: {
+      slug: slug,
+    },
+    include: {
+      media: {
+        include: {
+          images: true,
+        },
+      },
+    },
+  })
+  const rooms = await modifyRoomData([room])
 
   return {
     props: {
-      room,
+      room: superjson.stringify(rooms[0]),
     },
-  };
+  }
 }
 
-const SingleRoom = ({ room }) => {
+const SingleRoom = ({ room }: { room: string }) => {
+  const parsedRoom: any = superjson.parse(room)
+
   return (
     <div className="container mx-auto md:max-w-5xl mt-5 px-4">
       <Head>
-        <title>{room.title}</title>
-        <meta name="description" content={room.description} />
+        <title>{parsedRoom.name}</title>
+        <meta name="description" content={parsedRoom.description} />
       </Head>
       <section>
         <Image
-          src={room.imageUrl}
+          src={parsedRoom.media.images[0].url}
           layout="responsive"
           width={1024}
           height={500}
-          alt={room.image.alt}
+          alt={parsedRoom.name}
           className="rounded-lg"
         />
       </section>
@@ -58,11 +73,11 @@ const SingleRoom = ({ room }) => {
         <div className="md:w-3/5 md:pr-4">
           <Heading
             type={'h1'}
-            title={room.title}
+            title={parsedRoom.name}
             styles={'text-4xl font-semibold pb-2'}
           />
           <p className="mb-2 text-lg font-bold text-yellow-400">
-            Rs. {room.price}{' '}
+            Rs. {parsedRoom.costPerMonth}{' '}
             <span className="text-gray-500 font-medium">/ month</span>
           </p>
           <Divider />
@@ -72,7 +87,7 @@ const SingleRoom = ({ room }) => {
             title={'Description'}
             styles={'text-2xl mb-4 font-semibold'}
           />
-          <p className="mb-4">{room.description}</p>
+          <p className="mb-4">{parsedRoom.description}</p>
           <Divider />
 
           <Heading
@@ -83,7 +98,9 @@ const SingleRoom = ({ room }) => {
           <div className="grid grid-cols-2 gap-1 md:gap-y-6 mb-4">
             {Amenities.map((item, idx) => (
               <div key={idx} className="flex gap-2">
-                <div><Service icon={item.icon}/></div>
+                <div>
+                  <Service icon={item.icon} />
+                </div>
                 <p>{item.title}</p>
               </div>
             ))}
@@ -97,14 +114,12 @@ const SingleRoom = ({ room }) => {
               title={'Reserve the Room'}
               styles={'text-2xl mb-4 text-center'}
             />
-            <ReservationForm roomSlug={room.slug.current} />
+            <ReservationForm roomSlug={parsedRoom.slug} />
           </div>
         </div>
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default SingleRoom;
-
-
+export default SingleRoom

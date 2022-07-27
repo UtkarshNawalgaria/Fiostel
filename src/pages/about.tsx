@@ -3,22 +3,14 @@ import Image from 'next/image'
 import client from '../client'
 import Heading from '../components/Heading'
 
-const pageQuery = `
-  *[_type == "page" && title == "About Us"][0]
-`
 
-const About = ({ pageData }) => {
-  const {
-    pageSEO: { title = '', description = '' },
-    keywords = [],
-  } = pageData
+const About = () => {
 
   return (
     <div>
       <Head>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta name="keywords" content={keywords.join(', ')} />
+        <title>About Us | Fiostel - Boys PG in Karol Bagh</title>
+        <meta name="description" content="" />
       </Head>
       <section className="max-container max-w-4xl py-20 mb-0">
         <div className="flex flex-col justify-center items-center">
@@ -78,7 +70,6 @@ const About = ({ pageData }) => {
               src="/media/metro.jpg"
               width={500}
               height={450}
-              objectFit="true"
               alt="Metro near Fiostel"
             />
           </div>
@@ -120,7 +111,6 @@ const About = ({ pageData }) => {
               src="/media/students.jpg"
               width={500}
               height={450}
-              objectFit="true"
               alt="IAS Institutes near Fiostel"
             />
           </div>
@@ -133,11 +123,7 @@ const About = ({ pageData }) => {
 export default About
 
 export async function getStaticProps() {
-  const pageData = await client.fetch(pageQuery)
-
   return {
-    props: {
-      pageData,
-    },
+    props: {},
   }
 }

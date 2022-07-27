@@ -1,12 +1,12 @@
-import useCart from '../utils/cart'
+import useCart from '../context/cart.context'
 
 const CartItems = () => {
-  const { cart, changeQuantity, removeItem } = useCart()
+  const data = useCart()
 
   return (
     <>
       <div>
-        {cart.map((cartItem: any, idx: number) => {
+        {data?.cart.map((cartItem: any, idx: number) => {
           return (
             <div key={idx} className="flex justify-between mb-4">
               <div>{cartItem.item_name}</div>
@@ -16,9 +16,9 @@ const CartItems = () => {
                   <button
                     onClick={() => {
                       if (cartItem.count === 1) {
-                        removeItem(cartItem._id)
+                        data.removeItem(cartItem._id)
                       }
-                      changeQuantity(cartItem._id, 'DECREASE')
+                      data.changeQuantity(cartItem._id, 'DECREASE')
                     }}
                     className="px-2 text-red-700 text-lg"
                   >
@@ -26,7 +26,7 @@ const CartItems = () => {
                   </button>
                   <p className="pt-1">{cartItem.count}</p>
                   <button
-                    onClick={() => changeQuantity(cartItem._id, 'INCREASE')}
+                    onClick={() => data.changeQuantity(cartItem._id, 'INCREASE')}
                     className="px-2 text-green text-lg"
                   >
                     +

@@ -16,6 +16,7 @@ enum RoomType {
   SINGLE
   DOUBLE
   TRIPLE
+  FOUR
   DORMITORY
 }
 
@@ -71,38 +72,39 @@ model Media {
 model Image {
   id        String   @id @default(uuid())
   publicId  String   @unique
-  mediaId   String
+  mediaId   String?
   format    String
   amenity   Amenity?
-  media     Media    @relation(fields: [mediaId], references: [id])
+  media     Media?   @relation(fields: [mediaId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Location {
   id        Int            @id @default(autoincrement())
-  mediaId   String         @unique
+  mediaId   String?        @unique
   title     String         @db.VarChar(100)
   slug      String
   status    LocationStatus @default(ACTIVE)
   rooms     Room[]
-  media     Media          @relation(fields: [mediaId], references: [id])
+  media     Media?         @relation(fields: [mediaId], references: [id])
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
 }
 
 model Room {
   id          Int                @id @default(autoincrement())
+  slug        String             @unique
   name        String             @db.VarChar(50)
   description String?            @db.LongText
   costPerDay  Decimal
-  mediaId     String             @unique
+  mediaId     String?            @unique
   locationId  Int
   type        RoomType           @default(SINGLE)
   amenities   AmenitiesInRooms[]
   units       RoomUnit[]
   status      RoomStatus         @default(AVAILABLE)
-  media       Media              @relation(fields: [mediaId], references: [id])
+  media       Media?             @relation(fields: [mediaId], references: [id])
   location    Location           @relation(fields: [locationId], references: [id])
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
@@ -124,7 +126,7 @@ model Amenity {
   name    String
   code    String             @db.VarChar(10)
   rooms   AmenitiesInRooms[]
-  image   Image              @relation(fields: [imageId], references: [id])
+  image   Image?             @relation(fields: [imageId], references: [id])
   imageId String             @unique
 }
 
@@ -140,16 +142,16 @@ model AmenitiesInRooms {
 }
 
 model Booking {
-  id        Int           @id @default(autoincrement())
-  guestId   Int
-  unitId    Int
-  guest     Guest?        @relation(fields: [guestId], references: [id])
-  unit      RoomUnit      @relation(fields: [unitId], references: [id])
+  id      Int      @id @default(autoincrement())
+  guestId Int
+  unitId  Int
+  guest   Guest?   @relation(fields: [guestId], references: [id])
+  unit    RoomUnit @relation(fields: [unitId], references: [id])
 
   numberOfBeds Int
-  status    BookingStatus @default(RESERVED)
-  startDate DateTime
-  endDate   DateTime
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  status       BookingStatus @default(RESERVED)
+  startDate    DateTime
+  endDate      DateTime
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }

@@ -1,11 +1,19 @@
 import { useField } from 'formik'
 
-const MyInputField = ({ label, ...props }) => {
-  const [field, meta] = useField(props)
+type InputFieldProps = {
+  name: string
+  type: string
+  label: string
+  placeholder?: string
+  disabled?: boolean
+}
+
+const MyInputField = (props: InputFieldProps) => {
+  const [field, meta] = useField(props.name)
   return (
     <div className="mb-2">
       <label>
-        {label}
+        {props.label}
         <input
           {...field}
           {...props}

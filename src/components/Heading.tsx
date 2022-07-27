@@ -1,6 +1,12 @@
 import React from 'react'
 
-export const Heading = ({ type, title, styles }) => {
+type HeadingProps = {
+  type: string
+  title: string
+  styles: string
+}
+
+export const Heading = ({ type, title, styles }: HeadingProps) => {
   let returnElement
   switch (type) {
     case 'h2':

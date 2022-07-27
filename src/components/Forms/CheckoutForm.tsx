@@ -1,6 +1,7 @@
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
 import { checkoutSchema } from '../../utils/schema'
+import { getErrorMessage } from '../../utils/common'
 
 // Custom Components
 import Divider from '../Divider'
@@ -22,9 +23,17 @@ const CheckoutForm = ({
   const [checkoutError, setCheckoutError] = useState('')
 
   function loadRazorpay() {
-    const script = document.createElement('script')
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js'
-    document.body.appendChild(script)
+    return new Promise((resolve) => {
+      const script = document.createElement('script') as HTMLScriptElement
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+      script.onload = () => {
+        resolve(true)
+      }
+      script.onerror = () => {
+        resolve(false)
+      }
+      document.body.appendChild(script)
+    })
   }
 
   return (
@@ -41,7 +50,7 @@ const CheckoutForm = ({
       validationSchema={checkoutSchema}
       onSubmit={async (values, actions) => {
         actions.setSubmitting(true)
-        loadRazorpay()
+        await loadRazorpay()
 
         try {
           const res = await fetch('/api/razorpay', {
@@ -51,8 +60,8 @@ const CheckoutForm = ({
             }),
           })
           var { data } = await res.json()
-        } catch (err) {
-          console.log(err.message)
+        } catch (error) {
+          console.error(getErrorMessage(error))
         }
 
         let options = {
@@ -69,10 +78,11 @@ const CheckoutForm = ({
             address: `${values.place}, ${values.city}, ${values.state}, ${values.country} - ${values.pincode}`,
           },
         }
+
+        // @ts-ignore
         const rzp = new Razorpay(options)
         rzp.open()
       }}
-      autoComplete="off"
     >
       {(props) => (
         <Form {...props}>
@@ -137,7 +147,7 @@ const CheckoutForm = ({
                     name="country"
                     type="text"
                     label="Country"
-                    disabled="true"
+                    disabled={true}
                   />
                 </div>
               </div>

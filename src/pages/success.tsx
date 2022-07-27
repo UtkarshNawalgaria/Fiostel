@@ -1,12 +1,12 @@
 import Head from 'next/head'
 import { useEffect } from 'react'
-import useCart from '../utils/cart'
+import useCart from '../context/cart.context'
 
 const Success = () => {
-  const { emptyCart } = useCart()
+  const data = useCart()
 
   useEffect(() => {
-    emptyCart()
+    data?.emptyCart()
   }, [])
 
   return (

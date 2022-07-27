@@ -1,4 +1,4 @@
-const Sidebar = ({ children, sidebar, showSidebar }) => {
+const Sidebar = ({ children, sidebar, showSidebar }: any) => {
   return (
     <aside
       className={

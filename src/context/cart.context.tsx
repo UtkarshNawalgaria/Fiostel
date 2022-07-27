@@ -16,7 +16,7 @@ type CartContextType = {
   emptyCart: () => void
 }
 
-function useLocalStorage<Type>(key: string, inital: number | Type) {
+function useLocalStorage<Type>(key: string, inital: Type) {
   const [value, setValue] = useState<Type>(() => {
     if (typeof window !== 'undefined') {
       const saved = window.localStorage.getItem(key)
@@ -37,7 +37,7 @@ function useLocalStorage<Type>(key: string, inital: number | Type) {
 
 const CartContext = createContext<CartContextType | null>(null)
 
-export const CartProvider = ({ children }) => {
+export const CartProvider = ({ children }: any) => {
   const { value: cart, setValue: setCart } = useLocalStorage<ICartItem[]>(
     'cart_items',
     []
@@ -119,10 +119,10 @@ export const CartProvider = ({ children }) => {
     <CartContext.Provider
       value={{
         cart,
-        addToCart,
-        removeItem,
         cartTotal,
         cartTax,
+        addToCart,
+        removeItem,
         changeQuantity,
         emptyCart,
       }}
@@ -131,6 +131,7 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   )
 }
+
 const useCart = () => useContext(CartContext)
 
 export default useCart

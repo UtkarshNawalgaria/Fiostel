@@ -8,7 +8,7 @@ const Service = ({
   isSmall = false,
 }: {
   icon: string
-  isSmall: boolean
+  isSmall?: boolean
 }) => {
   const style = isSmall ? 'h-7 w-7' : 'h-12 w-12'
 

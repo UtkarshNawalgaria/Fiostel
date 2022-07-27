@@ -2,7 +2,7 @@ import { Formik, Form } from 'formik'
 import MyInputField from './MyInputField'
 import { reservationSchema } from '../../utils/schema'
 
-const ReservationForm = ({ roomSlug: slug }) => (
+const ReservationForm = ({ roomSlug }: {roomSlug?: string}) => (
   <Formik
     initialValues={{
       name: '',
@@ -17,7 +17,6 @@ const ReservationForm = ({ roomSlug: slug }) => (
         actions.setSubmitting(false)
       }, 1000)
     }}
-    autoComplete="off"
   >
     {(props) => (
       <Form {...props}>

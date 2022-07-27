@@ -4,10 +4,10 @@ import { useEffect } from 'react'
 import CartItems from '../components/CartItems'
 import CheckoutForm from '../components/Forms/CheckoutForm'
 import Heading from '../components/Heading'
-import useCart from '../utils/cart'
+import useCart from '../context/cart.context'
 
 export const Checkout = () => {
-  const { cart, cartTotal, cartTax } = useCart()
+  const { cart, cartTotal, cartTax } = useCart() as any
   const router = useRouter()
 
   useEffect(() => {
