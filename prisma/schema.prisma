@@ -20,11 +20,6 @@ enum RoomType {
   DORMITORY
 }
 
-enum LocationStatus {
-  ACTIVE
-  INACTIVE
-}
-
 enum RoomStatus {
   BOOKED
   AVAILABLE
@@ -63,16 +58,17 @@ model Guest {
 }
 
 model Media {
-  id       String    @id @default(uuid())
-  room     Room?
-  location Location?
-  images   Image[]
+  id          Int          @id @default(autoincrement())
+  room        Room?
+  destination Destination?
+  stay        Stay?
+  images      Image[]
 }
 
 model Image {
   id        String   @id @default(uuid())
-  publicId  String   @unique
-  mediaId   String?
+  url       String   @unique
+  mediaId   Int?
   format    String
   amenity   Amenity?
   media     Media?   @relation(fields: [mediaId], references: [id])
@@ -80,16 +76,32 @@ model Image {
   updatedAt DateTime @updatedAt
 }
 
-model Location {
-  id        Int            @id @default(autoincrement())
-  mediaId   String?        @unique
-  title     String         @db.VarChar(100)
-  slug      String
-  status    LocationStatus @default(ACTIVE)
-  rooms     Room[]
-  media     Media?         @relation(fields: [mediaId], references: [id])
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+model Destination {
+  id          Int      @id @default(autoincrement())
+  mediaId     Int?     @unique
+  name        String   @db.VarChar(100)
+  slug        String   @unique
+  description String?  @db.LongText
+  stays       Stay[]
+  media       Media?   @relation(fields: [mediaId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Stay {
+  id               Int         @id @default(autoincrement())
+  name             String
+  slug             String      @unique
+  description      String?     @db.LongText
+  shortDescription String?     @db.VarChar(300)
+  destinationId    Int
+  destination      Destination @relation(fields: [destinationId], references: [id])
+  rooms            Room[]
+  mediaId          Int?        @unique
+  media            Media?      @relation(fields: [mediaId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Room {
@@ -98,14 +110,14 @@ model Room {
   name        String             @db.VarChar(50)
   description String?            @db.LongText
   costPerDay  Decimal
-  mediaId     String?            @unique
-  locationId  Int
+  mediaId     Int?               @unique
+  stayId      Int
   type        RoomType           @default(SINGLE)
   amenities   AmenitiesInRooms[]
   units       RoomUnit[]
   status      RoomStatus         @default(AVAILABLE)
   media       Media?             @relation(fields: [mediaId], references: [id])
-  location    Location           @relation(fields: [locationId], references: [id])
+  stay        Stay               @relation(fields: [stayId], references: [id])
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
 }
