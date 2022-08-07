@@ -27,8 +27,8 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps(context: { params: { slug: any } }) {
-  const { slug } = context.params
+export async function getStaticProps({ params }: { params: { slug: string } }) {
+  const { slug } = params
   const room = await prisma.room.findUnique({
     where: {
       slug: slug,
@@ -76,9 +76,9 @@ const SingleRoom = ({ room }: { room: string }) => {
             title={parsedRoom.name}
             styles={'text-4xl font-semibold pb-2'}
           />
-          <p className="mb-2 text-lg font-bold text-yellow-400">
-            Rs. {parsedRoom.costPerMonth}{' '}
-            <span className="text-gray-500 font-medium">/ month</span>
+          <p className="mb-2 text-lg font-bold text-gray-700">
+            Rs. {parsedRoom.costPerDay}{' '}
+            <span className="text-gray-700 font-medium">/ month</span>
           </p>
           <Divider />
 
@@ -114,7 +114,7 @@ const SingleRoom = ({ room }: { room: string }) => {
               title={'Reserve the Room'}
               styles={'text-2xl mb-4 text-center'}
             />
-            <ReservationForm roomSlug={parsedRoom.slug} />
+            <ReservationForm />
           </div>
         </div>
       </section>

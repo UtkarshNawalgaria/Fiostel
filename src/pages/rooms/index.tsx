@@ -22,16 +22,19 @@ type Room = {
   }
 }
 
+
 const RoomLineItem = ({ room }: any) => {
   return (
-    <div className="my-6 p-2 border border-gray-200 rounded-lg md:flex md:flex-1">
+    <section className="room-line-item my-6 p-2 border border-gray-200 rounded-lg md:flex md:flex-1">
       <div className="h-96 w-full md:h-60 md:w-60 md:flex-none relative">
         <Image
-          src={room.media.images[0].url}
+          src={room.media?.images[0]?.url}
           layout="fill"
           objectFit="cover"
           className="rounded-lg"
           alt={room.name}
+          height={240}
+          width={240}
         />
       </div>
       <div className="mt-3 md:flex md:flex-col md:justify-between md:pl-4 md:pr-2 md:mt-0">
@@ -43,38 +46,39 @@ const RoomLineItem = ({ room }: any) => {
             </a>
           </Link>
           <p className="mb-5 text-lg font-semibold text-gray-700 py-1 md:hidden">
-            Rs {room.costPerMonth} / month
+            Rs {room.costPerDay} / month
           </p>
-          <p>{room.description}</p>
-        </div>
-
-        <div className="services my-2 flex justify-items-center">
-          {Services.map((item, idx) => (
-            <div key={idx} className="mr-4 align-center">
-              <Service icon={item.icon} isSmall={true} />
-            </div>
-          ))}
+          <p className='room-description w-3/4'>{room.description}</p>
+          <div className="services mt-4 flex justify-items-center">
+            {Services.map((item, idx) => (
+              <div key={idx} className="mr-4 align-center">
+                <Service icon={item.icon} isSmall={true} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       <div className="md:flex md:flex-col md:justify-between md:flex-none">
         <p className="text-lg font-semibold text-gray-700 pt-1 hidden md:block">
-          Rs {room.costPerMonth} / month
+          Rs {room.costPerDay} / night
         </p>
-        <Link href={`/rooms/${room.slug}`}>
-          <button className="p-3 mt-4 bg-yellow-400 rounded-md font-medium md:mx-2">
-            More Info
-          </button>
-        </Link>
+        <div>
+          <Link href={`/rooms/${room.slug}`}>
+            <button className="p-3 mt-4 bg-yellow-400 rounded-md font-medium md:mx-2">
+              More Info
+            </button>
+          </Link>
+        </div>
       </div>
-    </div>
+    </section>
   )
 }
 
 const Rooms = ({ rooms }: {rooms: Room[]}) => {
 
   return (
-    <div>
+    <section>
       <Head>
         <title>All Rooms | Fiostel Boys PG in Karol Bagh</title>
         <meta name="description" content="" />
@@ -99,7 +103,7 @@ const Rooms = ({ rooms }: {rooms: Room[]}) => {
           )}
         </div>
       </div>
-    </div>
+    </section>
   )
 }
 
@@ -117,7 +121,7 @@ export async function getStaticProps() {
             images: {
               select: {
                 id: true,
-                publicId: true,
+                url: true,
               }
             },
           }
