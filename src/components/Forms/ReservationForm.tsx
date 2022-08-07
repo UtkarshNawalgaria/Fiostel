@@ -2,7 +2,7 @@ import { Formik, Form } from 'formik'
 import MyInputField from './MyInputField'
 import { reservationSchema } from '../../utils/schema'
 
-const ReservationForm = ({ roomSlug }: {roomSlug?: string}) => (
+const ReservationForm = () => (
   <Formik
     initialValues={{
       name: '',
@@ -11,7 +11,6 @@ const ReservationForm = ({ roomSlug }: {roomSlug?: string}) => (
     }}
     validationSchema={reservationSchema}
     onSubmit={(values, actions) => {
-      console.log('After submitting')
       setTimeout(() => {
         alert(JSON.stringify(values, null, 2))
         actions.setSubmitting(false)
@@ -20,7 +19,6 @@ const ReservationForm = ({ roomSlug }: {roomSlug?: string}) => (
   >
     {(props) => (
       <Form {...props}>
-        {/* <MyInputField type="hidden" name="roomSlug" label="Room slug" /> */}
         <MyInputField
           name="name"
           type="text"

@@ -1,8 +1,8 @@
 export default [
   {
     id: 1,
-    title: 'Rooms',
-    path: '/rooms',
+    title: 'Destinations',
+    path: '/destinations',
   },
   {
     id: 2,

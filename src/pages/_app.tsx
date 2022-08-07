@@ -24,9 +24,12 @@ export default withTRPC<AppRouter>({
       : 'http://localhost:3000/api/trpc'
 
     const links = [
-      loggerLink(),
+      loggerLink({
+        enabled: (opts) =>
+          process.env.NODE_ENV === 'development' ||
+          (opts.direction === 'down' && opts.result instanceof Error),
+      }),
       httpBatchLink({
-        maxBatchSize: 10,
         url,
       }),
     ]
@@ -52,5 +55,5 @@ export default withTRPC<AppRouter>({
       transformer: superjson,
     }
   },
-  ssr: false
+  ssr: false,
 })(MyApp)

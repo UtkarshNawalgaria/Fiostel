@@ -10,7 +10,7 @@ const Service = ({
   icon: string
   isSmall?: boolean
 }) => {
-  const style = isSmall ? 'h-7 w-7' : 'h-12 w-12'
+  const style = isSmall ? 'h-5 w-5' : 'h-12 w-12'
 
   if (icon == 'toilet') {
     return <FaToilet className={style} />
