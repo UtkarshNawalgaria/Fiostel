@@ -6,7 +6,7 @@ import { MdArrowRightAlt } from 'react-icons/md'
 
 const Destination = ({ destination }: { destination: string }) => {
   const parsedDestination: any = superjson.parse(destination)
-
+  
   return (
     <section className="destination-hero container mx-auto">
       <div className="page-header">
@@ -43,15 +43,20 @@ const Destination = ({ destination }: { destination: string }) => {
                       {stay.name}
                     </a>
                   </Link>
-                  <p className="mt-5 font-semibold text-gray-500 md:w-3/4">
+                  <p className="mt-5 font-medium text-gray-500 md:w-3/4">
                     {stay.shortDescription}
                   </p>
-                  <Link href={`stay/${stay.slug}`}>
-                    <a className="inline-block cursor-pointer bg-[#facc15] text-white my-4 font-semibold px-6 py-2 rounded-md mt-5 hover:text-[#facc15] hover:bg-white border-2 border-[#facc15] focus:outline-none transition ease-in-out duration-100">
-                      <span>View</span>
-                      <MdArrowRightAlt className="inline-block ml-2 text-xl" />
-                    </a>
-                  </Link>
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div className={stay.minPrice ? 'block' : 'hidden'}>
+                      <p className="font-semibold text-base">Starting from <span className="text-xl">Rs {stay.minPrice}</span></p>
+                    </div>
+                    <Link href={`stay/${stay.slug}`}>
+                      <a className="inline-block cursor-pointer bg-[#facc15] text-white my-4 font-semibold px-6 py-2 rounded-md mt-5 hover:text-[#facc15] hover:bg-white border-2 border-[#facc15] focus:outline-none transition ease-in-out duration-100">
+                        <span>View</span>
+                        <MdArrowRightAlt className="inline-block ml-2 text-xl" />
+                      </a>
+                    </Link>
+                  </div>
                 </div>
               </div>
             )
@@ -93,10 +98,27 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
               },
             },
           },
+          rooms: {
+            select: {
+              costPerDay: true
+            }
+          }
         },
       },
     },
   })
+
+  if (destination?.stays) {
+    destination.stays = destination?.stays.map(stay => {
+      const roomPrices = stay.rooms.map(room => room.costPerDay.toNumber())
+      const minPrice = Math.min(...roomPrices)
+
+      return {
+        ...stay,
+        minPrice: isFinite(minPrice) ? minPrice : 0,
+      }
+    })
+  }
 
   return {
     props: {
