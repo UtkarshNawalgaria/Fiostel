@@ -3,7 +3,7 @@ export function getErrorMessage(error: unknown) {
   return String(error)
 }
 
-export async function modifyRoomData(data: any) {
+export function modifyRoomData(data: any) {
   const rooms = data.map((room: any) => {
     return {
       ...room,

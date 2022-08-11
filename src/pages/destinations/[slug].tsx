@@ -4,9 +4,9 @@ import superjson from 'superjson'
 import Link from 'next/link'
 import { MdArrowRightAlt } from 'react-icons/md'
 
-const Destination = ({ destination }: { destination: string }) => {
+const Destination: React.FC<{ destination: string }> = ({ destination }) => {
   const parsedDestination: any = superjson.parse(destination)
-  
+
   return (
     <section className="destination-hero container mx-auto">
       <div className="page-header">

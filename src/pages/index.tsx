@@ -3,12 +3,6 @@ import Image from 'next/image'
 import Button from '../components/Button'
 import Heading from '../components/Heading'
 
-export async function getStaticProps() {
-  return {
-    props: {},
-  }
-}
-
 export default function Home() {
   return (
     <div>
@@ -125,4 +119,10 @@ export default function Home() {
       </section>
     </div>
   )
+}
+
+export async function getStaticProps() {
+  return {
+    props: {},
+  }
 }

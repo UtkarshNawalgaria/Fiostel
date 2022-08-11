@@ -11,7 +11,7 @@ type Room = {
   slug: string
   name: string
   description: string
-  costPerMonth: number
+  costPerDay: number
   media: {
     id: string
     images: Array<{
@@ -23,7 +23,7 @@ type Room = {
 }
 
 
-const RoomLineItem = ({ room }: any) => {
+const RoomLineItem: React.FC<{room: Room}> = ({ room }) => {
   return (
     <section className="room-line-item my-6 p-2 border border-gray-200 rounded-lg md:flex md:flex-1">
       <div className="h-96 w-full md:h-60 md:w-60 md:flex-none relative">
@@ -75,7 +75,7 @@ const RoomLineItem = ({ room }: any) => {
   )
 }
 
-const Rooms = ({ rooms }: {rooms: Room[]}) => {
+const Rooms: React.FC<{rooms: Room[]}> = ({ rooms }) => {
 
   return (
     <section>
@@ -108,7 +108,7 @@ const Rooms = ({ rooms }: {rooms: Room[]}) => {
 }
 
 export async function getStaticProps() {
-  const rooms = await modifyRoomData(
+  const rooms = modifyRoomData(
     await prisma.room.findMany({
       select: {
         id: true,

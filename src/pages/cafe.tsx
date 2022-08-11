@@ -62,7 +62,7 @@ export async function getStaticProps() {
   }
 }
 
-const Cafe = ({ categories, items }: {categories: Category[], items: Item[]}) => {
+const Cafe: React.FC<{ categories: Category[], items: Item[]}> = ({ categories, items }) => {
   const { cart, cartTotal, addToCart } = useCart() as any
 
   const [menuItems, setMenuItems] = useState(items)

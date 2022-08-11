@@ -50,7 +50,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
   }
 }
 
-const SingleRoom = ({ room }: { room: string }) => {
+const SingleRoom: React.FC<{ room: string }> = ({ room }) => {
   const parsedRoom: any = superjson.parse(room)
 
   return (

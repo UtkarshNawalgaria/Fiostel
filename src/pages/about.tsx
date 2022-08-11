@@ -1,11 +1,8 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import client from '../client'
 import Heading from '../components/Heading'
 
-
 const About = () => {
-
   return (
     <div>
       <Head>

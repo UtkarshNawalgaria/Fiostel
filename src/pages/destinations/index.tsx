@@ -4,7 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 import prisma from '../../utils/prisma'
 
-const DestinationList = ({ destinations }: { destinations: any }) => {
+const DestinationList: React.FC<{ destinations: any}> = ({ destinations }) => {
   return (
     <section>
       <Head>
