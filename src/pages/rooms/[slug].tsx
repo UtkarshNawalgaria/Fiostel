@@ -10,46 +10,6 @@ import prisma from '../../utils/prisma'
 import { modifyRoomData } from '../../utils/common'
 import superjson from 'superjson'
 
-export async function getStaticPaths() {
-  const rooms = await prisma.room.findMany({
-    select: {
-      slug: true,
-    },
-  })
-
-  const paths = rooms?.map((room) => ({
-    params: { slug: room.slug },
-  }))
-
-  return {
-    paths,
-    fallback: false,
-  }
-}
-
-export async function getStaticProps({ params }: { params: { slug: string } }) {
-  const { slug } = params
-  const room = await prisma.room.findUnique({
-    where: {
-      slug: slug,
-    },
-    include: {
-      media: {
-        include: {
-          images: true,
-        },
-      },
-    },
-  })
-  const rooms = await modifyRoomData([room])
-
-  return {
-    props: {
-      room: superjson.stringify(rooms[0]),
-    },
-  }
-}
-
 const SingleRoom: React.FC<{ room: string }> = ({ room }) => {
   const parsedRoom: any = superjson.parse(room)
 
@@ -120,6 +80,46 @@ const SingleRoom: React.FC<{ room: string }> = ({ room }) => {
       </section>
     </div>
   )
+}
+
+export async function getStaticProps({ params }: { params: { slug: string } }) {
+  const { slug } = params
+  const room = await prisma.room.findUnique({
+    where: {
+      slug: slug,
+    },
+    include: {
+      media: {
+        include: {
+          images: true,
+        },
+      },
+    },
+  })
+  const rooms = await modifyRoomData([room])
+
+  return {
+    props: {
+      room: superjson.stringify(rooms[0]),
+    },
+  }
+}
+
+export async function getStaticPaths() {
+  const rooms = await prisma.room.findMany({
+    select: {
+      slug: true,
+    },
+  })
+
+  const paths = rooms?.map((room) => ({
+    params: { slug: room.slug },
+  }))
+
+  return {
+    paths,
+    fallback: false,
+  }
 }
 
 export default SingleRoom
