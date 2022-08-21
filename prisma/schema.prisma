@@ -67,7 +67,7 @@ model Media {
 
 model Image {
   id        String   @id @default(uuid())
-  url       String   @unique
+  url       String
   mediaId   Int?
   format    String
   amenity   Amenity?

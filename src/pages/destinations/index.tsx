@@ -66,6 +66,7 @@ export async function getStaticProps() {
     props: {
       destinations,
     },
+    revalidate: 30,
   }
 }
 
