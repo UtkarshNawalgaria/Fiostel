@@ -4,7 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 import prisma from '../../utils/prisma'
 
-const DestinationList: React.FC<{ destinations: any}> = ({ destinations }) => {
+const DestinationList: React.FC<{ destinations: any }> = ({ destinations }) => {
   return (
     <section>
       <Head>
@@ -19,16 +19,21 @@ const DestinationList: React.FC<{ destinations: any}> = ({ destinations }) => {
           {destinations ? (
             destinations.map((destination: any) => {
               return (
-                <div className="w-full" key={destination.slug}>
+                <div
+                  className="w-full relative"
+                  key={destination.slug}
+                >
                   <Link href={`/destinations/${destination.slug}`}>
-                    <a>
+                    <a className="after:content-[''] after:absolute after:inset-0 after:bg-black after:rounded-lg after:opacity-0 after:hover:opacity-10">
                       <Image
                         src={`${destination.media.images[0].url}?h=400`}
-                        className="rounded-lg"
+                        className="rounded-lg h-[400px] w-[400px]"
                         height={400}
                         width={400}
                       />
-                      <p className="text-2xl font-semibold">{destination.name}</p>
+                      <p className="text-2xl text-white font-semibold absolute top-[80%] left-[5%]">
+                        {destination.name}
+                      </p>
                     </a>
                   </Link>
                 </div>
