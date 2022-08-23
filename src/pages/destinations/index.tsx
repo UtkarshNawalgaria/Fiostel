@@ -24,7 +24,7 @@ const DestinationList: React.FC<{ destinations: any }> = ({ destinations }) => {
                   key={destination.slug}
                 >
                   <Link href={`/destinations/${destination.slug}`}>
-                    <a className="after:content-[''] after:absolute after:inset-0 after:bg-black after:rounded-lg after:opacity-0 after:hover:opacity-10">
+                    <a className="after:content-[''] after:absolute after:inset-0 after:bg-black after:rounded-lg after:opacity-0 after:hover:opacity-10 after:transition-opacity after:delay-100 after:ease-in">
                       <Image
                         src={`${destination.media.images[0].url}?h=400`}
                         className="rounded-lg h-[400px] w-[400px]"
