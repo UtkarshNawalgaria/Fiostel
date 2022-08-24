@@ -3,12 +3,55 @@ import prisma from '../../utils/prisma'
 import superjson from 'superjson'
 import Link from 'next/link'
 import { MdArrowRightAlt } from 'react-icons/md'
+import { Prisma } from '@prisma/client'
+
+const destinationSelectFields = {
+  media: {
+    include: {
+      images: {
+        select: {
+          id: true,
+          url: true,
+        },
+      },
+    },
+  },
+  stays: {
+    select: {
+      id: true,
+      slug: true,
+      name: true,
+      shortDescription: true,
+      media: {
+        include: {
+          images: {
+            select: {
+              id: true,
+              url: true,
+            },
+          },
+        },
+      },
+      rooms: {
+        select: {
+          costPerDay: true
+        }
+      }
+    },
+  },
+}
+
+const SingleDestinationData = Prisma.validator<Prisma.DestinationArgs>()({
+  include: destinationSelectFields
+})
+
+type Destination = Prisma.DestinationGetPayload<typeof SingleDestinationData>
 
 const Destination: React.FC<{ destination: string }> = ({ destination }) => {
-  const parsedDestination: any = superjson.parse(destination)
+  const parsedDestination: Destination = superjson.parse(destination)
 
   return (
-    <section className="destination-hero container mx-auto">
+    <section className="destination-hero container mx-auto max-w-7xl">
       <div className="page-header">
         <h1 className="text-center font-bold text-3xl my-10">
           Welcome to{' '}
@@ -24,7 +67,7 @@ const Destination: React.FC<{ destination: string }> = ({ destination }) => {
       </div>
       <div className="stay-list flex flex-col items-start">
         {parsedDestination.stays ? (
-          parsedDestination.stays.map((stay: any) => {
+          parsedDestination.stays.map((stay) => {
             return (
               <div
                 className="stay-card mx-6 my-10 flex flex-col shadow-lg rounded-lg relative md:rounded-none md:w-full md:shadow-none md:px-0 md:flex-row md:gap-0 md:items-center"
@@ -32,9 +75,9 @@ const Destination: React.FC<{ destination: string }> = ({ destination }) => {
               >
                 <div className="w-full md:max-w-2xl bg-subtitle">
                   <img
-                    src={stay.media.images[0].url + '?w=500'}
+                    src={stay.media?.images[0].url + '?w=500'}
                     alt={stay.name}
-                    className="md:h-96 object-cover object-center rounded-t-lg md:rounded-lg"
+                    className="md:h-96 object-cover object-center rounded-t-lg md:rounded-lg w-full"
                   />
                 </div>
                 <div className="stay-data p-4 text-center md:w-1/2 md:relative md:text-left md:shadow-md md:h-2/3 md:rounded-lg md:bg-light">
@@ -75,37 +118,7 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
     where: {
       slug: slug,
     },
-    include: {
-      media: {
-        include: {
-          images: true,
-        },
-      },
-      stays: {
-        select: {
-          id: true,
-          slug: true,
-          name: true,
-          description: true,
-          shortDescription: true,
-          media: {
-            include: {
-              images: {
-                select: {
-                  id: true,
-                  url: true,
-                },
-              },
-            },
-          },
-          rooms: {
-            select: {
-              costPerDay: true
-            }
-          }
-        },
-      },
-    },
+    include: destinationSelectFields,
   })
 
   if (destination?.stays) {

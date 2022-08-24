@@ -1,10 +1,33 @@
+import { Prisma } from '@prisma/client'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import prisma from '../../utils/prisma'
 
-const DestinationList: React.FC<{ destinations: any }> = ({ destinations }) => {
+const destinationSelectFields = {
+  id: true,
+  slug: true,
+  name: true,
+  media: {
+    include: {
+      images: {
+        select: {
+          id: true,
+          url: true,
+        },
+      },
+    },
+  },
+}
+
+const SingleDestinationData = Prisma.validator<Prisma.DestinationArgs>()({
+  select: destinationSelectFields
+})
+
+type Destination = Prisma.DestinationGetPayload<typeof SingleDestinationData>
+
+const DestinationList: React.FC<{ destinations: Destination[] }> = ({ destinations }) => {
   return (
     <section>
       <Head>
@@ -17,7 +40,7 @@ const DestinationList: React.FC<{ destinations: any }> = ({ destinations }) => {
         </h1>
         <div className="grid grid-cols-4 gap-2 mb-10">
           {destinations ? (
-            destinations.map((destination: any) => {
+            destinations.map((destination) => {
               return (
                 <div
                   className="w-full relative"
@@ -26,7 +49,7 @@ const DestinationList: React.FC<{ destinations: any }> = ({ destinations }) => {
                   <Link href={`/destinations/${destination.slug}`}>
                     <a className="after:content-[''] after:absolute after:inset-0 after:bg-black after:rounded-lg after:opacity-0 after:hover:opacity-10 after:transition-opacity after:delay-100 after:ease-in">
                       <Image
-                        src={`${destination.media.images[0].url}?h=400`}
+                        src={`${destination?.media?.images[0].url}?h=400`}
                         className="rounded-lg h-[400px] w-[400px]"
                         height={400}
                         width={400}
@@ -50,21 +73,7 @@ const DestinationList: React.FC<{ destinations: any }> = ({ destinations }) => {
 
 export async function getStaticProps() {
   const destinations = await prisma.destination.findMany({
-    select: {
-      id: true,
-      slug: true,
-      name: true,
-      media: {
-        include: {
-          images: {
-            select: {
-              id: true,
-              url: true,
-            },
-          },
-        },
-      },
-    },
+    select: destinationSelectFields,
   })
 
   return {
