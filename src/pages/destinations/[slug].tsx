@@ -45,7 +45,8 @@ const SingleDestinationData = Prisma.validator<Prisma.DestinationArgs>()({
   include: destinationSelectFields
 })
 
-type Destination = Prisma.DestinationGetPayload<typeof SingleDestinationData>
+type minPrice = { minPrice: number }
+type Destination = Prisma.DestinationGetPayload<typeof SingleDestinationData> & minPrice
 
 const Destination: React.FC<{ destination: string }> = ({ destination }) => {
   const parsedDestination: Destination = superjson.parse(destination)
@@ -90,7 +91,9 @@ const Destination: React.FC<{ destination: string }> = ({ destination }) => {
                     {stay.shortDescription}
                   </p>
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                    {/* @ts-ignore */}
                     <div className={stay.minPrice ? 'block' : 'hidden'}>
+                      {/* @ts-ignore */}
                       <p className="font-semibold text-base">Starting from <span className="text-xl">Rs {stay.minPrice}</span></p>
                     </div>
                     <Link href={`stay/${stay.slug}`}>
