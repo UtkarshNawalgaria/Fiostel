@@ -55,7 +55,7 @@ const RoomList: React.FC<{ rooms: Room[]; stay: Stay }> = ({ stay, rooms }) => {
   if (rooms.length == 0) {
     return <div>No Rooms Available</div>
   }
-  
+
   return (
     <>
       <section className="mb-5 container mx-auto max-w-7xl md:my-10">
@@ -79,7 +79,7 @@ const RoomList: React.FC<{ rooms: Room[]; stay: Stay }> = ({ stay, rooms }) => {
               <div key={room.slug} className="flex flex-col mb-10 md:flex-row">
                 <div className="w-[300px]">
                   <img
-                    src={room.media?.images[0].url}
+                    src={room.media?.images[0].url ?? "/default-hostel-room.jpg"}
                     alt={room.name}
                     className="md:h-[200px] md:rounded-tl-lg md:rounded-bl-lg"
                   />
