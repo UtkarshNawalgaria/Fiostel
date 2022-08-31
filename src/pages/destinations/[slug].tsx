@@ -45,8 +45,7 @@ const SingleDestinationData = Prisma.validator<Prisma.DestinationArgs>()({
   include: destinationSelectFields
 })
 
-type minPrice = { minPrice: number }
-type Destination = Prisma.DestinationGetPayload<typeof SingleDestinationData> & minPrice
+type Destination = Prisma.DestinationGetPayload<typeof SingleDestinationData>
 
 const Destination: React.FC<{ destination: string }> = ({ destination }) => {
   const parsedDestination: Destination = superjson.parse(destination)
