@@ -76,7 +76,7 @@ const RESERVATION_PERCENTAGE = 20
 
 const RoomsListItem: React.FC<{
   room: TRoom
-  onRoomSelection: (slug: string) => void
+  onRoomSelection: (id: number) => void
 }> = ({ room, onRoomSelection }) => {
   return (
     <div className="flex flex-col mb-10 md:flex-row">
@@ -95,7 +95,7 @@ const RoomsListItem: React.FC<{
         <div className="flex justify-end">
           <button
             className="inline-block cursor-pointer bg-[#facc15] text-white mt-4 font-semibold px-6 py-2 rounded-md hover:text-[#facc15] hover:bg-white border-2 border-[#facc15] focus:outline-none transition ease-in-out duration-100"
-            onClick={() => onRoomSelection(room.slug)}
+            onClick={() => onRoomSelection(room.id)}
           >
             <span>Book Room</span>
             <MdArrowRightAlt className="inline-block ml-2 text-xl" />
@@ -106,7 +106,9 @@ const RoomsListItem: React.FC<{
   )
 }
 
-const BookingSummary: React.FC<{ bookingData: TBookingData }> = ({ bookingData }) => {
+const BookingSummary: React.FC<{ bookingData: TBookingData }> = ({
+  bookingData,
+}) => {
   return (
     <div>
       <div className="text-black font-semibold">
@@ -169,11 +171,9 @@ const RoomList: React.FC<{ rooms: TRoom[]; stay: TStay }> = ({
     },
   })
 
-  const handleDateRangeSelection = (item: any) => {
-    const bookingDays = differenceInDays(
-      item.selection.endDate,
-      item.selection.startDate
-    )
+  function handleDateRangeSelection(item: any) {
+    const { startDate, endDate } = item.selection
+    const bookingDays = differenceInDays(endDate, startDate)
 
     if (bookingDays > 0) setShowCalendar(false)
 
@@ -192,21 +192,21 @@ const RoomList: React.FC<{ rooms: TRoom[]; stay: TStay }> = ({
         reservationTotal,
         duration: bookingDays,
         dates: {
-          startDate: item.selection.startDate,
-          endDate: item.selection.endDate,
-          key: item.selection.key,
+          ...item.selection,
         },
       }
     })
   }
 
-  const handleRoomSelection = (slug: string) => {
+  function handleRoomSelection(id: number) {
+    if (id === bookingData.room?.id) return
+
     setBookingData((data) => {
-      const room = rooms.find((x) => x.slug == slug)
+      const room = rooms.find((x) => x.id == id)
       const tax = (data.duration * (room?.costPerDay ?? 0) * GST_RATE) / 100
       const roomTotal = (room?.costPerDay ?? 0) * bookingData.duration
       const subTotal = roomTotal + tax
-      const reservationTotal = (subTotal ?? 0) * RESERVATION_PERCENTAGE / 100
+      const reservationTotal = ((subTotal ?? 0) * RESERVATION_PERCENTAGE) / 100
 
       return {
         ...data,
@@ -214,14 +214,14 @@ const RoomList: React.FC<{ rooms: TRoom[]; stay: TStay }> = ({
         room,
         roomTotal,
         subTotal,
-        reservationTotal
+        reservationTotal,
       }
     })
     setIsRoomSelected(true)
-    getRoomAvailability()
+    getRoomAvailability(id)
   }
 
-  const getRoomAvailability = () => {
+  function getRoomAvailability(id: number) {
     if (!bookingData?.room) return
   }
 
@@ -311,7 +311,9 @@ const RoomList: React.FC<{ rooms: TRoom[]; stay: TStay }> = ({
             {isRoomSelected ? (
               <div>
                 <BookingSummary bookingData={bookingData} />
-                <button className='mt-5 w-full px-6 py-4 bg-[#facc15] font-semibold rounded-md text-white'>Book Now</button>
+                <button className="mt-5 w-full px-6 py-4 bg-[#facc15] font-semibold rounded-md text-white">
+                  Book Now
+                </button>
               </div>
             ) : (
               <div className="flex flex-col items-center gap-2 text-gray-500">
