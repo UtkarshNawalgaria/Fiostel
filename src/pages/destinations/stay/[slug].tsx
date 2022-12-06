@@ -5,8 +5,8 @@ import prisma from '../../../utils/prisma'
 import { Prisma } from '@prisma/client'
 import { DateRangePicker } from 'react-date-range'
 import { addDays, differenceInDays } from 'date-fns'
-import 'react-date-range/dist/styles.css' // main css file
-import 'react-date-range/dist/theme/default.css' // theme css file
+import 'react-date-range/dist/styles.css'
+import 'react-date-range/dist/theme/default.css'
 
 const roomSelectFields = {
   id: true,
@@ -223,6 +223,8 @@ const RoomList: React.FC<{ rooms: TRoom[]; stay: TStay }> = ({
 
   function getRoomAvailability(id: number) {
     if (!bookingData?.room) return
+
+    return true
   }
 
   if (rooms.length == 0) {
@@ -232,7 +234,7 @@ const RoomList: React.FC<{ rooms: TRoom[]; stay: TStay }> = ({
   return (
     <>
       <Head>
-        <title>{stay.name}</title>
+        <title>{stay.name} | Fiostel</title>
       </Head>
       <section className="mb-5 container mx-auto max-w-7xl md:my-10">
         <div>
@@ -249,41 +251,8 @@ const RoomList: React.FC<{ rooms: TRoom[]; stay: TStay }> = ({
         </div>
       </section>
       <section className="container mx-auto max-w-7xl p-4 flex flex-col-reverse gap-4 md:flex-row md:my-10 md:p-0">
+        {/* Room List */}
         <div className="room-list flex flex-col md:w-2/3">
-          {/* Date Selection */}
-          <div className="relative self-end mb-4">
-            <div className="p-4 bg-gray-100 rounded-md mb-4 shadow-sm">
-              <span
-                className="font-bold mr-4 bg-white p-2 rounded-md shadow-sm cursor-pointer"
-                onClick={() => setShowCalendar(!showCalendar)}
-              >
-                {bookingData.dates.startDate.toDateString()}
-              </span>
-              <MdArrowRightAlt className="inline-block text-xl" />
-              <span
-                className="font-bold bg-white p-2 rounded-md shadow-sm cursor-pointer ml-4"
-                onClick={() => setShowCalendar(!showCalendar)}
-              >
-                {bookingData.dates.endDate.toDateString()}
-              </span>
-            </div>
-            {showCalendar ? (
-              <div className="absolute -left-2/4 shadow-lg top-[95%]">
-                <DateRangePicker
-                  months={2}
-                  inputRanges={[]}
-                  staticRanges={[]}
-                  minDate={new Date()}
-                  ranges={[bookingData.dates]}
-                  date={addDays(new Date(), 1)}
-                  direction="horizontal"
-                  onChange={(item) => handleDateRangeSelection(item)}
-                />
-              </div>
-            ) : null}
-          </div>
-
-          {/* Room List */}
           {rooms.map((room) => (
             <RoomsListItem
               key={room.slug}
@@ -294,10 +263,51 @@ const RoomList: React.FC<{ rooms: TRoom[]; stay: TStay }> = ({
         </div>
 
         {/* Booking Summary */}
-        <div className="hidden md:block md:w-1/3 md:border md:rounded-lg md:px-4">
+        <div className="hidden md:block md:w-1/3 md:border md:rounded-lg md:px-4 md:shadow-lg">
           <div>
             <div className="text-center mb-10 pb-4 border-b">
-              <h2 className="font-bold text-3xl pt-4">Booking Summary</h2>
+              {/* Date Selection */}
+              <div className="relative self-end my-4">
+                <div className="p-4 bg-gray-100 rounded-md mb-4 shadow-sm">
+                  <div className="inline-block">
+                    <div className="text-left uppercase text-sm mb-1">
+                      Check In
+                    </div>
+                    <div
+                      className="font-bold mr-4 bg-white p-2 rounded-md shadow-sm cursor-pointer"
+                      onClick={() => setShowCalendar(!showCalendar)}
+                    >
+                      {bookingData.dates.startDate.toDateString()}
+                    </div>
+                  </div>
+                  <MdArrowRightAlt className="inline-block text-xl" />
+                  <div className="inline-block ml-4">
+                    <div className="text-left uppercase text-sm mb-1">
+                      Check Out
+                    </div>
+                    <div
+                      className="font-bold bg-white p-2 rounded-md shadow-sm cursor-pointer"
+                      onClick={() => setShowCalendar(!showCalendar)}
+                    >
+                      {bookingData.dates.endDate.toDateString()}
+                    </div>
+                  </div>
+                </div>
+                {showCalendar ? (
+                  <div className="absolute -left-2/4 shadow-lg top-[95%]">
+                    <DateRangePicker
+                      months={2}
+                      inputRanges={[]}
+                      staticRanges={[]}
+                      minDate={new Date()}
+                      ranges={[bookingData.dates]}
+                      date={addDays(new Date(), 1)}
+                      direction="horizontal"
+                      onChange={(item) => handleDateRangeSelection(item)}
+                    />
+                  </div>
+                ) : null}
+              </div>
               <p className="text-gray-500 font-bold mt-2">
                 <span className="text-black">
                   {bookingData.duration} nights
@@ -315,14 +325,7 @@ const RoomList: React.FC<{ rooms: TRoom[]; stay: TStay }> = ({
                   Book Now
                 </button>
               </div>
-            ) : (
-              <div className="flex flex-col items-center gap-2 text-gray-500">
-                <div>
-                  <MdEditCalendar className="text-8xl" />
-                </div>
-                <p>No Rooms Selected</p>
-              </div>
-            )}
+            ) : null}
           </div>
         </div>
       </section>
