@@ -1,13 +1,33 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
-import React, { useState } from 'react'
+'use client'
 
-import CartItems from '../components/CartItems'
-import useCart from '../context/cart.context'
-
+import { useEffect, useState } from 'react'
+import useCart, { CartContextType } from '../../../context/cart.context'
 import sanityClient from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
+import Image from 'next/image'
+import CartItems from '../../../components/CartItems'
+import Link from 'next/link'
+
+export type Slug = {
+  _type: string
+  current: string
+}
+
+export type TMetadata = {
+  _id: string
+  _createdAt: string
+  _rev: string
+  _type: string
+  _updatedAt: string
+  slug: Slug
+}
+
+export type Category = TMetadata & {
+  order: number
+  title: string
+}
+
+export type TItem = TMetadata
 
 const publicClient = sanityClient({
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
@@ -18,76 +38,57 @@ const publicClient = sanityClient({
 const builder = imageUrlBuilder(publicClient)
 const urlFor = (source: string) => builder.image(source)
 
-interface Slug {
-  _type: string
-  current: string
+async function fetchCategories() {
+  const categories = (await publicClient.fetch(
+    '*[_type == "category"] | order(order)'
+  )) as Category[]
+
+  return categories
 }
 
-interface Metadata {
-  _id: string
-  _createdAt: string
-  _rev: string
-  _type: string
-  _updatedAt: string
-  slug: Slug
+async function fetchItems(categoryId: string) {
+  const items = (await publicClient.fetch(
+    `*[_type == 'item' && category._ref == "${categoryId}"]`
+  )) as TItem[]
+
+  return items
 }
 
-interface Category extends Metadata{
-  order: number
-  title: string
-}
+export default function CafePage() {
+  const { cart, cartTotal, addToCart } = useCart() as CartContextType
 
-interface Item extends Metadata {
-
-}
-
-export async function getStaticProps() {
-  const client = sanityClient({
-    projectId: process.env.PROJECT_ID,
-    dataset: process.env.DATASET,
-    useCdn: false,
-  })
-
-  const categories = await client.fetch('*[_type == "category"] | order(order)') as Category[]
-
-  const items = await client.fetch(
-    `*[_type == 'item' && category._ref == "${categories[0]._id}"]`
-  ) as Item[]
-
-  return {
-    props: {
-      categories,
-      items,
-    },
-  }
-}
-
-const Cafe: React.FC<{ categories: Category[], items: Item[]}> = ({ categories, items }) => {
-  const { cart, cartTotal, addToCart } = useCart() as any
-
-  const [menuItems, setMenuItems] = useState(items)
-  const [currCategory, setCurrCategory] = useState<string>(categories[0].title)
+  const [menuItems, setMenuItems] = useState<TItem[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [currCategory, setCurrCategory] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
 
-  async function getMenuItems(e: any, id: string) {
+  async function getMenuItems(categoryId: string) {
     setLoading(true)
     const nitems = await publicClient.fetch(
-      `*[_type == 'item' && category._ref == "${id}"]`
+      `*[_type == 'item' && category._ref == "${categoryId}"]`
     )
     setLoading(false)
     setMenuItems(nitems)
   }
 
+  useEffect(() => {
+    async function fetchData() {
+      const categories = await fetchCategories()
+      const items = await fetchItems(categories[0]._id)
+
+      setMenuItems(items)
+      setCategories(categories)
+      setCurrCategory(categories[0].title)
+    }
+
+    fetchData()
+  }, [])
+
   return (
     <div className="container mx-auto my-10">
-      <Head>
-        <title>Cafe | Fiostel - Boys PG in Karol Bagh</title>
-        <meta name="description" content="" />
-      </Head>
       <section className="mb-10 text-center">
         <h1 className="text-6xl">Fiostel Cafe</h1>
       </section>
-
       <section className="flex">
         {/* Menu Item Categories */}
         <aside className="w-1/5 text-right py-6 border-r-2 h-screen sticky top-0">
@@ -100,7 +101,7 @@ const Cafe: React.FC<{ categories: Category[], items: Item[]}> = ({ categories, 
                 <button
                   onClick={(e) => {
                     setCurrCategory(category.title)
-                    getMenuItems(e, category._id)
+                    getMenuItems(category._id)
                   }}
                   className="pr-2"
                 >
@@ -110,7 +111,6 @@ const Cafe: React.FC<{ categories: Category[], items: Item[]}> = ({ categories, 
             )
           })}
         </aside>
-
         {/* Menu Items */}
         <section className="w-3/5 p-6">
           <h2 className="text-4xl mb-10">{currCategory}</h2>
@@ -125,7 +125,7 @@ const Cafe: React.FC<{ categories: Category[], items: Item[]}> = ({ categories, 
                       {/* Food Image */}
                       <div className="w-auto">
                         <Image
-                          src={urlFor(item.image).url() || "#"}
+                          src={urlFor(item.image).url() || '#'}
                           height={150}
                           width={150}
                           objectFit="cover"
@@ -133,7 +133,6 @@ const Cafe: React.FC<{ categories: Category[], items: Item[]}> = ({ categories, 
                           alt={item.image.alt}
                         />
                       </div>
-
                       {/* Food Details */}
                       <div className="flex flex-col px-4 w-2/3">
                         <h3 className="text-lg font-semibold -mt-1">
@@ -142,7 +141,6 @@ const Cafe: React.FC<{ categories: Category[], items: Item[]}> = ({ categories, 
                         <p>Rs. {item.price}</p>
                         <p className="mt-2 text-gray-500">Description</p>
                       </div>
-
                       {/* Add to Cart button */}
                       <div className="w-1/3 text-center">
                         <button
@@ -159,7 +157,6 @@ const Cafe: React.FC<{ categories: Category[], items: Item[]}> = ({ categories, 
             </>
           )}
         </section>
-
         {/* Cart Section */}
         <div className="w-1/5 py-6 ml-2 h-screen sticky top-0">
           {cart.length === 0 ? (
@@ -172,8 +169,8 @@ const Cafe: React.FC<{ categories: Category[], items: Item[]}> = ({ categories, 
                 Total: <span className="text-lg">₹</span> {cartTotal}
               </p>
               <button className="w-full mt-6 px-4 py-3 bg-green text-white hover:shadow-lg text-center">
-                <Link href="/checkout">
-                  <a className="w-full">Checkout</a>
+                <Link href="/checkout" className="w-full">
+                  Checkout
                 </Link>
               </button>
             </div>
@@ -183,5 +180,3 @@ const Cafe: React.FC<{ categories: Category[], items: Item[]}> = ({ categories, 
     </div>
   )
 }
-
-export default Cafe

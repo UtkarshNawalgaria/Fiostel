@@ -1,12 +1,12 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
-interface ICartItem {
+type ICartItem = {
   price: number
   count: number
   _id: string
 }
 
-type CartContextType = {
+export type CartContextType = {
   cart: ICartItem[]
   cartTotal: number
   cartTax: number

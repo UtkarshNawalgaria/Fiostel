@@ -1,12 +1,13 @@
-import { useRouter } from 'next/router'
-import Head from 'next/head'
-import { useEffect } from 'react'
-import CartItems from '../components/CartItems'
-import CheckoutForm from '../components/Forms/CheckoutForm'
-import Heading from '../components/Heading'
-import useCart from '../context/cart.context'
+'use client'
 
-export const Checkout = () => {
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import CartItems from '../../../components/CartItems'
+import CheckoutForm from '../../../components/Forms/CheckoutForm'
+import Heading from '../../../components/Heading'
+import useCart from '../../../context/cart.context'
+
+export default function CheckoutPage() {
   const { cart, cartTotal, cartTax } = useCart() as any
   const router = useRouter()
 
@@ -17,12 +18,8 @@ export const Checkout = () => {
   }, [cart])
 
   return (
-    <div>
-      <Head>
-        <title>Checkout - Fiostel</title>
-        <meta name="description" content="" />
-      </Head>
-      <div className="bg-gray-100 py-5">
+    <div className="h-screen">
+      <div className="bg-gray-100 py-5 h-full">
         <div className="container px-4 md:mx-auto md:max-w-4xl">
           <section className="text-center py-6">
             <Heading
@@ -41,7 +38,9 @@ export const Checkout = () => {
                 />
                 <div>
                   <CheckoutForm
-                    onSuccessfulCheckout={() => router.push('/success')}
+                    onSuccessfulCheckout={(response) => {
+                      console.log(response)
+                    }}
                     cartData={{ cartTotal, cartTax }}
                   />
                 </div>
@@ -65,5 +64,3 @@ export const Checkout = () => {
     </div>
   )
 }
-
-export default Checkout

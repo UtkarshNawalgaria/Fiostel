@@ -1,12 +1,15 @@
-import Head from 'next/head'
-import React, { useState } from 'react'
-import { MdArrowRightAlt, MdEditCalendar } from 'react-icons/md'
-import prisma from '../../../utils/prisma'
+'use client'
+
 import { Prisma } from '@prisma/client'
-import { DateRangePicker } from 'react-date-range'
 import { addDays, differenceInDays } from 'date-fns'
+import { useState } from 'react'
+import { DateRangePicker } from 'react-date-range'
+import { MdArrowRightAlt } from 'react-icons/md'
 import 'react-date-range/dist/styles.css'
 import 'react-date-range/dist/theme/default.css'
+
+const GST_RATE = 18
+const RESERVATION_PERCENTAGE = 20
 
 const roomSelectFields = {
   id: true,
@@ -54,8 +57,9 @@ const room = Prisma.validator<Prisma.RoomArgs>()({
 type costPerDay = {
   costPerDay: number
 }
-type TStay = Prisma.StayGetPayload<typeof stay>
-type TRoom = Prisma.RoomGetPayload<typeof room> & costPerDay
+export type TStay = Prisma.StayGetPayload<typeof stay>
+export type TRoom = Prisma.RoomGetPayload<typeof room> & costPerDay
+
 type TBookingData = {
   stay: string
   room?: TRoom
@@ -69,41 +73,6 @@ type TBookingData = {
     endDate: Date
     key: string
   }
-}
-
-const GST_RATE = 18
-const RESERVATION_PERCENTAGE = 20
-
-const RoomsListItem: React.FC<{
-  room: TRoom
-  onRoomSelection: (id: number) => void
-}> = ({ room, onRoomSelection }) => {
-  return (
-    <div className="flex flex-col mb-10 md:flex-row">
-      <div className="w-[300px]">
-        <img
-          src={room.media?.images[0].url ?? '/default-hostel-room.jpg'}
-          alt={room.name}
-          className="md:h-[200px] md:rounded-tl-lg md:rounded-bl-lg"
-        />
-      </div>
-      <div className="w-full border-[#e7e7e7e] flex flex-col justify-between md:p-4 md:border-y md:border-r md:rounded-tr-lg md:rounded-br-lg">
-        <div className="flex justify-between w-full">
-          <h3 className="font-bold text-xl">{room.name}</h3>
-          <div className="font-bold text-xl">Rs {room?.costPerDay}</div>
-        </div>
-        <div className="flex justify-end">
-          <button
-            className="inline-block cursor-pointer bg-[#facc15] text-white mt-4 font-semibold px-6 py-2 rounded-md hover:text-[#facc15] hover:bg-white border-2 border-[#facc15] focus:outline-none transition ease-in-out duration-100"
-            onClick={() => onRoomSelection(room.id)}
-          >
-            <span>Book Room</span>
-            <MdArrowRightAlt className="inline-block ml-2 text-xl" />
-          </button>
-        </div>
-      </div>
-    </div>
-  )
 }
 
 const BookingSummary: React.FC<{ bookingData: TBookingData }> = ({
@@ -146,6 +115,38 @@ const BookingSummary: React.FC<{ bookingData: TBookingData }> = ({
           <div>
             <span>{bookingData?.reservationTotal}</span>
           </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const RoomsListItem: React.FC<{
+  room: TRoom
+  onRoomSelection: (id: number) => void
+}> = ({ room, onRoomSelection }) => {
+  return (
+    <div className="flex flex-col mb-10 md:flex-row">
+      <div className="w-[300px]">
+        <img
+          src={room.media?.images[0].url ?? '/default-hostel-room.jpg'}
+          alt={room.name}
+          className="md:h-[200px] md:rounded-tl-lg md:rounded-bl-lg"
+        />
+      </div>
+      <div className="w-full border-[#e7e7e7e] flex flex-col justify-between md:p-4 md:border-y md:border-r md:rounded-tr-lg md:rounded-br-lg">
+        <div className="flex justify-between w-full">
+          <h3 className="font-bold text-xl">{room.name}</h3>
+          <div className="font-bold text-xl">Rs {room?.costPerDay}</div>
+        </div>
+        <div className="flex justify-end">
+          <button
+            className="inline-block cursor-pointer bg-[#facc15] text-white mt-4 font-semibold px-6 py-2 rounded-md hover:text-[#facc15] hover:bg-white border-2 border-[#facc15] focus:outline-none transition ease-in-out duration-100"
+            onClick={() => onRoomSelection(room.id)}
+          >
+            <span>Book Room</span>
+            <MdArrowRightAlt className="inline-block ml-2 text-xl" />
+          </button>
         </div>
       </div>
     </div>
@@ -233,9 +234,6 @@ const RoomList: React.FC<{ rooms: TRoom[]; stay: TStay }> = ({
 
   return (
     <>
-      <Head>
-        <title>{stay.name} | Fiostel</title>
-      </Head>
       <section className="mb-5 container mx-auto max-w-7xl md:my-10">
         <div>
           <img
@@ -331,55 +329,6 @@ const RoomList: React.FC<{ rooms: TRoom[]; stay: TStay }> = ({
       </section>
     </>
   )
-}
-
-export async function getStaticProps({ params }: { params: { slug: string } }) {
-  const { slug } = params
-
-  const stay = await prisma.stay.findUnique({
-    where: {
-      slug: slug,
-    },
-    select: staySelectFields,
-  })
-
-  const rooms = await prisma.room
-    .findMany({
-      where: {
-        stayId: stay?.id,
-      },
-      select: roomSelectFields,
-    })
-    .then((data) => {
-      return data.map((room) => ({
-        ...room,
-        costPerDay: room.costPerDay.toNumber(),
-      }))
-    })
-
-  return {
-    props: {
-      stay,
-      rooms: rooms.length > 0 ? rooms : [],
-    },
-  }
-}
-
-export async function getStaticPaths() {
-  const stays = await prisma.stay.findMany({
-    select: {
-      slug: true,
-    },
-  })
-
-  const paths = stays?.map((stay) => ({
-    params: { slug: stay.slug },
-  }))
-
-  return {
-    paths,
-    fallback: false,
-  }
 }
 
 export default RoomList
