@@ -1,3 +1,5 @@
+'use client'
+
 import { Form, Formik } from 'formik'
 import { useState } from 'react'
 import { checkoutSchema } from '../../utils/schema'
@@ -9,7 +11,7 @@ import Heading from '../Heading'
 import MyInputField from './MyInputField'
 
 interface CheckoutFormProps {
-  onSuccessfulCheckout: () => void
+  onSuccessfulCheckout: (response: unknown) => void
   cartData: {
     cartTotal: number
     cartTax: number
@@ -53,7 +55,7 @@ const CheckoutForm = ({
         await loadRazorpay()
 
         try {
-          const res = await fetch('/api/razorpay', {
+          const res = await fetch('/api/razorpay/create-order', {
             method: 'POST',
             body: JSON.stringify({
               amount: (cartData.cartTotal + cartData.cartTax) * 100,
@@ -71,8 +73,8 @@ const CheckoutForm = ({
             email: values.email,
             contact: values.phone,
           },
-          handler: () => {
-            onSuccessfulCheckout()
+          handler: (response: unknown) => {
+            onSuccessfulCheckout(response)
           },
           notes: {
             address: `${values.place}, ${values.city}, ${values.state}, ${values.country} - ${values.pincode}`,
@@ -81,6 +83,12 @@ const CheckoutForm = ({
 
         // @ts-ignore
         const rzp = new Razorpay(options)
+        rzp.on(
+          'payment.failed',
+          function (response: { error: { [key: string]: string | number } }) {
+            console.log('Error in payment', response.error)
+          }
+        )
         rzp.open()
       }}
     >
