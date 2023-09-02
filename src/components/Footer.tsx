@@ -11,14 +11,14 @@ const Footer = () => {
           {/* Left-hand Side */}
           <div className="flex flex-col sm:w-1/3 sm:p-2 text-center">
             <h3 className="text-xl font-semibold mb-6">Links</h3>
-            <Link href="/cafe">
-              <a className="mb-2">Cafe</a>
+            <Link href="/cafe" className="mb-2">
+              Cafe
             </Link>
-            <Link href="/about">
-              <a className="mb-2">About Us</a>
+            <Link href="/about" className="mb-2">
+              About Us
             </Link>
-            <Link href="#">
-              <a className="mb-2">Code of Conduct</a>
+            <Link href="#" className="mb-2">
+              Code of Conduct
             </Link>
           </div>
 
@@ -30,8 +30,8 @@ const Footer = () => {
             <div className="my-8 flex items-center justify-center mx-auto">
               {social.map((link) => {
                 return (
-                  <Link href={link.url} key={link.id}>
-                    <a className="mx-2"><Socials icon={link.icon} style={link.style}/></a>
+                  <Link href={link.url} key={link.id} className="mx-2">
+                    <Socials icon={link.icon} style={link.style} />
                   </Link>
                 )
               })}

@@ -1,15 +1,16 @@
-import Head from 'next/head'
 import Image from 'next/image'
-import Button from '../components/Button'
-import Heading from '../components/Heading'
+import Button from '../../components/Button'
+import Heading from '../../components/Heading'
+import { Metadata } from 'next'
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: 'Fiostel - Home away from Home',
+  description: 'PG in Karol Bagh',
+}
+
+export default function HomePage() {
   return (
     <div>
-      <Head>
-        <title>Fiostel - Home away from Home</title>
-        <meta name="description" content="PG in Karol Bagh" />
-      </Head>
       <section className="bg-hero-image bg-no-repeat bg-cover bg-center py-5 md:py-0">
         <div className="max-container md:flex md:pt-40 md:pb-60">
           <div>
@@ -19,7 +20,7 @@ export default function Home() {
             <Button
               title="View Rooms"
               styles="py-4 px-6 rounded-lg bg-yellow-400 font-semibold hover:bg-yellow-500 hover:shadow-md transition duration-300 ease-in-out"
-              link="/rooms"
+              link="/destinations"
             />
           </div>
         </div>
@@ -119,10 +120,4 @@ export default function Home() {
       </section>
     </div>
   )
-}
-
-export async function getStaticProps() {
-  return {
-    props: {},
-  }
 }

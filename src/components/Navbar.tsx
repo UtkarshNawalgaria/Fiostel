@@ -1,3 +1,5 @@
+"use client"
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -14,14 +16,12 @@ const Navbar = () => {
       <div className="flex justify-between items-center md:max-w-5xl mx-auto">
         <div>
           <Link href="/">
-            <a>
-              <Image
-                src="/media/Fiostel-Logo.png"
-                width={128}
-                height={68}
-                alt="Site Logo"
-              />
-            </a>
+            <Image
+              src="/media/Fiostel-Logo.png"
+              width={128}
+              height={68}
+              alt="Site Logo"
+            />
           </Link>
         </div>
         <div
@@ -49,13 +49,12 @@ const Navbar = () => {
         <nav className="hidden md:flex md:justify-between">
           {NavItems.map((item, index) => {
             return (
-              <Link href={item.path} key={index}>
-                <a
-                  key={index}
-                  className="p-3 mx-3 text-lg font-medium border-b-2 border-transparent hover:border-yellow-300"
-                >
-                  {item.title}
-                </a>
+              <Link
+                href={item.path}
+                key={index}
+                className="p-3 mx-3 text-lg font-medium border-b-2 border-transparent hover:border-yellow-300"
+              >
+                {item.title}
               </Link>
             )
           })}
@@ -71,9 +70,7 @@ const Navbar = () => {
                 onClick={showSidebar}
                 className="p-2 m-1 text-center border-b-4 border-transparent hover:border-yellow-300"
               >
-                <Link href={item.path}>
-                  <a>{item.title}</a>
-                </Link>
+                <Link href={item.path}>{item.title}</Link>
               </div>
             )
           })}

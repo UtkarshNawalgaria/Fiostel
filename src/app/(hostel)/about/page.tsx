@@ -1,14 +1,15 @@
-import Head from 'next/head'
 import Image from 'next/image'
-import Heading from '../components/Heading'
+import Heading from '../../../components/Heading'
+import { Metadata } from 'next'
 
-const About = () => {
+export const metadata: Metadata = {
+    title: "About Us | Fiostel - Boys PG in Karol Bagh",
+    description: ""
+}
+
+export default function AboutPage() {
   return (
     <div>
-      <Head>
-        <title>About Us | Fiostel - Boys PG in Karol Bagh</title>
-        <meta name="description" content="" />
-      </Head>
       <section className="max-container max-w-4xl py-20 mb-0">
         <div className="flex flex-col justify-center items-center">
           <Heading
@@ -115,12 +116,4 @@ const About = () => {
       </section>
     </div>
   )
-}
-
-export default About
-
-export async function getStaticProps() {
-  return {
-    props: {},
-  }
 }

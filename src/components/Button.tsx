@@ -3,9 +3,7 @@ import Link from 'next/link'
 const Button = ({ title = '', link = '', styles = '' }) => {
   return (
     <button className={styles}>
-      <Link href={link}>
-        <a>{title}</a>
-      </Link>
+      <Link href={link}>{title}</Link>
     </button>
   )
 }
