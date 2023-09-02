@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -17,14 +13,20 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/utils/prisma.mts"],
-  "exclude": [
-    "node_modules"
-  ]
+    "src/utils/prisma.mts",
+    ".next/types/**/*.ts",
+    "src/app/checkout"
+  ],
+  "exclude": ["node_modules"]
 }
