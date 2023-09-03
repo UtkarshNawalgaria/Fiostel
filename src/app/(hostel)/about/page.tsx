@@ -10,16 +10,15 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div>
-      <section className="max-container max-w-4xl py-20 mb-0">
+      <section className="max-container max-w-4xl pb-20 mb-0">
         <div className="flex flex-col justify-center items-center">
           <Heading
             type="h1"
             title="Our Journey"
-            styles="text-center text-4xl font-semibold uppercase pb-4"
+            styles="text-center text-4xl my-10 font-extrabold pb-4"
           />
-          <div className="h-1 w-8 bg-black"></div>
           <div className="text-gray-700">
-            <p className="text-justify pt-10 pb-4">
+            <p className="text-justify pb-4">
               Started off in May 2016 as a back-packer’s and traveler’s hostel,
               Fiostel grew to host UPSC students. Realising the growing need of
               the youth to live in a new age hostel/ PG which would be more
@@ -52,7 +51,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
       <section className="max-container">
         <div className="flex flex-col justify-center items-center mb-10">
           <Heading

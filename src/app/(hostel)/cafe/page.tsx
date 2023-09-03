@@ -7,6 +7,7 @@ import imageUrlBuilder from '@sanity/image-url'
 import Image from 'next/image'
 import CartItems from '../../../components/CartItems'
 import Link from 'next/link'
+import Heading from '../../../components/Heading'
 
 export type Slug = {
   _type: string
@@ -87,7 +88,11 @@ export default function CafePage() {
   return (
     <div className="container mx-auto my-10">
       <section className="mb-10 text-center">
-        <h1 className="text-6xl">Fiostel Cafe</h1>
+        <Heading
+          type="h1"
+          title="Fiostel Cafe"
+          styles="text-center text-4xl my-10 font-extrabold pb-4"
+        />
       </section>
       <section className="flex">
         {/* Menu Item Categories */}

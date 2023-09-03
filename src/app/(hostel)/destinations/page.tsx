@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import prisma from '../../../utils/prisma'
 import { Metadata } from 'next'
+import Heading from '../../../components/Heading'
 
 const destinationSelectFields = {
   id: true,
@@ -20,10 +21,6 @@ const destinationSelectFields = {
   },
 }
 
-const SingleDestinationData = Prisma.validator<Prisma.DestinationArgs>()({
-  select: destinationSelectFields,
-})
-
 export const metadata: Metadata = {
   title: 'All Destinations | Fiostel Boys PG in Karol Bagh',
 }
@@ -36,14 +33,19 @@ export default async function DestinationListPage() {
   return (
     <section>
       <div className="container mx-auto md:max-w-7xl">
-        <h1 className="text-center my-10 text-4xl font-extrabold">
-          Destinations
-        </h1>
+        <Heading
+          type="h1"
+          title="Destinations"
+          styles="text-center my-10 text-4xl font-extrabold"
+        />
         <div className="grid grid-cols-4 gap-2 mb-10">
           {destinations ? (
             destinations.map((destination) => {
               return (
-                <div className="w-full h-[400px] relative" key={destination.slug}>
+                <div
+                  className="w-full h-[400px] relative"
+                  key={destination.slug}
+                >
                   <Link
                     href={`/destinations/${destination.slug}`}
                     className="before:content-[''] before:absolute before:inset-0 before:bg-black before:rounded-lg before:opacity-0 before:hover:opacity-10 before:transition-opacity before:delay-100 before:ease-in"

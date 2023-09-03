@@ -1,9 +1,18 @@
 import { Metadata } from 'next'
+import Heading from '../../../components/Heading'
 
 export const metadata: Metadata = {
   title: 'Contact Us - Fiostel | Boys PG in Karol Bagh',
 }
 
 export default function ContactPage() {
-  return <h1 className="text-center text-2xl font-semibold my-10">Contact Us</h1>
+  return (
+    <>
+      <Heading
+        type="h1"
+        title="Contact Us"
+        styles="text-center text-4xl my-10 font-extrabold pb-4"
+      />
+    </>
+  )
 }
