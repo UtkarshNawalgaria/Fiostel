@@ -1,3 +1,5 @@
+'use client'
+
 import { createContext, useContext, useEffect, useState } from 'react'
 
 type ICartItem = {
@@ -18,11 +20,10 @@ export type CartContextType = {
 
 function useLocalStorage<Type>(key: string, inital: Type) {
   const [value, setValue] = useState<Type>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = window.localStorage.getItem(key)
-      if (saved != null) {
-        return JSON.parse(saved)
-      }
+    const saved = window.localStorage.getItem(key)
+
+    if (saved != null) {
+      return JSON.parse(saved)
     }
 
     return inital
@@ -32,24 +33,15 @@ function useLocalStorage<Type>(key: string, inital: Type) {
     window.localStorage.setItem(key, JSON.stringify(value))
   }, [value])
 
-  return { value, setValue }
+  return [value, setValue]
 }
 
 const CartContext = createContext<CartContextType | null>(null)
 
 export const CartProvider = ({ children }: any) => {
-  const { value: cart, setValue: setCart } = useLocalStorage<ICartItem[]>(
-    'cart_items',
-    []
-  )
-  const { value: cartTotal, setValue: setCartTotal } = useLocalStorage<number>(
-    'cart_total',
-    0
-  )
-  const { value: cartTax, setValue: setCartTax } = useLocalStorage<number>(
-    'cart_tax',
-    0
-  )
+  const [cart, setCart] = useLocalStorage<ICartItem[]>('cart_items', [])
+  const [cartTotal, setCartTotal] = useLocalStorage<number>('cart_total', 0)
+  const [cartTax, setCartTax] = useLocalStorage<number>('cart_tax', 0)
 
   useEffect(() => {
     let total = cart.reduce(
