@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
 
 type ICartItem = {
   price: number
@@ -18,7 +18,10 @@ export type CartContextType = {
   emptyCart: () => void
 }
 
-function useLocalStorage<Type>(key: string, inital: Type) {
+function useLocalStorage<Type>(
+  key: string,
+  inital: Type
+): [Type, Dispatch<SetStateAction<Type>>] {
   const [value, setValue] = useState<Type>(() => {
     const saved = window.localStorage.getItem(key)
 
